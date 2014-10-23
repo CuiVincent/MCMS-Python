@@ -1,63 +1,90 @@
+
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Shamcey - Metro Style Admin Template</title>
-<link rel="stylesheet" href=" {{ static_url('css/style.default.css') }}" type="text/css" />
-<link rel="stylesheet" href=" {{ static_url('css/style.shinyblue.css') }}" type="text/css" />
-
-<script type="text/javascript" src=" {{ static_url('js/jquery-1.9.1.min.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/jquery-migrate-1.1.1.min.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/jquery-ui-1.10.3.min.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/modernizr.min.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/jquery.cookie.js') }}"></script>
-<script type="text/javascript" src=" {{ static_url('js/custom.js') }}"></script>
-<script type="text/javascript">
-    jQuery(document).ready(function(){
-        jQuery('#login').submit(function(){
-            var u = jQuery('#username').val();
-            var p = jQuery('#password').val();
-            if(u == '' && p == '') {
-                jQuery('.login-alert').fadeIn();
-                return false;
-            }
+    <title>RACMS-登录</title>
+    <meta charset="UTF-8"/>
+    {% include '../matrix_header_login.html' %}
+    {% include '../common_header_validate.html' %}
+    {% include '../common_header_ajax.html' %}
+    <script>
+        $(function () {
+            initValidate($("#recoverform"));//被动校验，submit时触发校验，不适用于ajax
         });
-    });
-</script>
+
+        /*
+         登录
+         */
+        function doLogin() {
+//            $("#loginform").submit();
+            if (validate($("#loginform")))//主动校验
+                ajaxCommitForm($("#loginform"), function () {
+                    location.href="/sys_login/index.do";
+                });
+        }
+        /*
+         显示错误信息
+         */
+        function doShowErrMsg(errmsg) {
+            if (null != errmsg && 'null' != errmsg) {
+                showGritter('error', '登录失败', errmsg);
+            }
+        }
+        function doGetPasswd() {
+            showGritter('info', 'e-mail已发送!', " ");
+            $("#recoverform").submit();
+        }
+    </script>
 </head>
+<body>
+<div id="loginbox">
+    <form id="loginform" class="form-vertical" action="sys/doLogin" method="post">
+        {% raw xsrf_form_html() %}
+        <div class="control-group normal_text"><h3><img src="{{ static_url('img/logo.png') }}" alt="ReindeerApps"/></h3></div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_lg"><i class="icon-user"></i></span><input type="text" id="usercode"
+                                                                                      name="usercode"
+                                                                                      validate="{required:true,messages:{required:'请输入用户名'}}"
+                                                                                      placeholder="请输入用户名"/>
+                </div>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <div class="main_input_box">
+                    <span class="add-on bg_ly"><i class="icon-lock"></i></span><input type="password" id="passwd"
+                                                                                      name="passwd"
+                                                                                      validate="{required:true,messages:{required:'请输入密码'}}"
+                                                                                      placeholder="请输入密码"/>
+                </div>
+            </div>
+        </div>
+        <div class="form-actions">
+            <span class="pull-left"><a href="#" class="flip-link btn btn-info" id="to-recover">忘记密码?</a></span>
+            <span class="pull-right"><a type="submit" class="btn btn-success" onclick="doLogin();">登录</a></span>
+        </div>
+    </form>
+    <form id="recoverform" action="#" class="form-vertical">
+        <p class="normal_text">通过e-mail找回密码</p>
 
-<body class="loginpage">
+        <div class="controls">
+            <div class="main_input_box">
+                <span class="add-on bg_lo"><i class="icon-envelope"></i></span><input type="text" id="email"
+                                                                                      name="email"
+                                                                                      validate="{required:true,email:true,messages:{required:'请输入e-mail地址',email:'输入的e-mail地址格式不正确'}}"
+                                                                                      placeholder="请输入e-mail地址"/>
+            </div>
+        </div>
 
-<div class="loginpanel">
-    <div class="loginpanelinner">
-        <div class="logo animate0 bounceIn"><img src="images/logo.png" alt="" /></div>
-        <form id="login" action="dashboard.html" method="post">
-            <div class="inputwrapper login-alert">
-                <div class="alert alert-error">Invalid username or password</div>
-            </div>
-            <div class="inputwrapper animate1 bounceIn">
-                <input type="text" name="username" id="username" placeholder="Enter any username" />
-            </div>
-            <div class="inputwrapper animate2 bounceIn">
-                <input type="password" name="password" id="password" placeholder="Enter any password" />
-            </div>
-            <div class="inputwrapper animate3 bounceIn">
-                <button name="submit">Sign In</button>
-            </div>
-            <div class="inputwrapper animate4 bounceIn">
-                <div class="pull-right">Not a member? <a href="registration.html">Sign Up</a></div>
-                <label><input type="checkbox" class="remember" name="signin" /> Keep me sign in</label>
-            </div>
-
-        </form>
-    </div><!--loginpanelinner-->
-</div><!--loginpanel-->
-
-<div class="loginfooter">
-    <p>&copy; 2013. Shamcey Admin Template. All Rights Reserved.</p>
+        <div class="form-actions">
+            <span class="pull-left"><a href="#" class="flip-link btn btn-success" id="to-login">返回登录</a></span>
+            <span class="pull-right"><a class="btn btn-info" onclick="doGetPasswd();">找回密码</a></span>
+        </div>
+    </form>
 </div>
 
 </body>
 </html>
+
