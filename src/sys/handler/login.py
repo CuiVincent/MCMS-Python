@@ -10,6 +10,10 @@ class ToLoginHandler(tornado.web.RequestHandler):
 
 class DoLoginHandler(tornado.web.RequestHandler):
     def post(self, *args, **kwargs):
-        print '11111111111'
-        res = {'success': False, 'msg': '错误', 'info': '错误了！'}
+        usercode = self.get_argument('usercode')
+        passwd = self.get_argument('passwd')
+        if(usercode == 'cui' and passwd == '111' ):
+             res = {'success': True}
+        else:
+             res = {'success': False, 'msg': '错误', 'info': '错误了！'}
         return self.write(json_encode(res))
