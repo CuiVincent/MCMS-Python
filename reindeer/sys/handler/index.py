@@ -1,9 +1,10 @@
 __author__ = 'CuiVincent'
-# encoding:utf-8
+# -*- coding: utf8 -*-
 
 import tornado.web
+import reindeer.sys.base
 
-class IndexHandler(tornado.web.RequestHandler):
+class IndexHandler(reindeer.sys.base.BaseHandler):
 
     @tornado.web.authenticated
     def get(self):

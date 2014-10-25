@@ -13,7 +13,7 @@ function doAjaxCommit( url, param, onSuccess,onError) {
                 onError(result);
             }
         },error: function (result) {
-            onError(result);
+            onError(JSON.parse(result.responseText));
         }
     });
 }

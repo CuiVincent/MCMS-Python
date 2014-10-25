@@ -1,4 +1,4 @@
-from src.sys.urls import sys_urls
+from reindeer.sys.urls import sys_urls
 
 __author__ = 'CuiVincent'
 __all__ = ['app_urls']

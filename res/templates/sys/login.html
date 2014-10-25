@@ -6,7 +6,7 @@
     <meta charset="UTF-8"/>
     {% include '../matrix_header_login.html' %}
     {% include '../common_header_validate.html' %}
-    {% include '../common_header_ajax.html' %}
+    {% include '../common_header_gritter.html' %}
     <script>
         $(function () {
             initValidate($("#recoverform"));//被动校验，submit时触发校验，不适用于ajax
@@ -18,8 +18,8 @@
         function doLogin() {
 //            $("#loginform").submit();
             if (validate($("#loginform")))//主动校验
-                ajaxCommitForm($("#loginform"), function () {
-                    location.href="/sys_login/index.do";
+                ajaxCommitFormWithGritter($("#loginform"), function () {
+                    location.href="/";
                 });
         }
         /*
@@ -32,13 +32,13 @@
         }
         function doGetPasswd() {
             showGritter('info', 'e-mail已发送!', " ");
-            $("#recoverform").submit();
+            ajaxCommitFormWithGritter($("#recoverform"));
         }
     </script>
 </head>
 <body>
 <div id="loginbox">
-    <form id="loginform" class="form-vertical" action="sys/doLogin" method="post">
+    <form id="loginform" class="form-vertical" action="login" method="post">
         {% raw xsrf_form_html() %}
         <div class="control-group normal_text"><h3><img src="{{ static_url('img/logo.png') }}" alt="ReindeerApps"/></h3></div>
         <div class="control-group">
