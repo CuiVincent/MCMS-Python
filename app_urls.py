@@ -1,6 +1,6 @@
 from src.sys.urls import sys_urls
 
-__author__ = 'VincentCui'
+__author__ = 'CuiVincent'
 __all__ = ['app_urls']
 
 app_urls = []

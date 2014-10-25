@@ -1,4 +1,4 @@
-__author__ = 'VincentCui'
+__author__ = 'CuiVincent'
 __all__ = ['sys_urls']
 
 from src.sys.handler import index

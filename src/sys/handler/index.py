@@ -1,9 +1,9 @@
-__author__ = 'VincentCui'
+__author__ = 'CuiVincent'
 # encoding:utf-8
 
 import tornado.web
 
-class SysIndexHandler(tornado.web.RequestHandler):
+class IndexHandler(tornado.web.RequestHandler):
 
     @tornado.web.authenticated
     def get(self):

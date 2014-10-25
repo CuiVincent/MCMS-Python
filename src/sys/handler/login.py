@@ -1,4 +1,4 @@
-__author__ = 'VincentCui'
+__author__ = 'CuiVincent'
 # encoding:utf-8
 
 import tornado.web
