@@ -1,19 +1,10 @@
-<%@ page import="com.mcms.sfw.sys.model.SysPri" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.mcms.sfw.common.util.SessionUtil" %>
-<%@ page import="com.mcms.sfw.common.util.ViewUtil" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    String webapp = request.getContextPath();
-    List<SysPri> pris = SessionUtil.getLgoinUserPris(request);
-%>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MCMS</title>
+    <title>RACMS</title>
     <meta charset="UTF-8"/>
     {% include '../matrix_header_index.html' %}
-    {% include '../common_header_ajax.html' %}
+    {% include '../common_header_gritter.html' %}
     <script>
         $(function(){
             setContent(null,'/page/main.jsp');
@@ -22,7 +13,7 @@
          登出
          */
         function doLogout() {
-            location.href = "<%=webapp %>/sys_login/logout.do";
+            location.href = "/logout";
         }
 
         function iFrameHeight() {
@@ -38,7 +29,7 @@
                 var a =$("#"+aid);
                 a.closest('li').addClass("active");
                 $("#iframe").attr("height", 0);
-                $("#iframe").attr("src", <%=webapp%>url);
+                $("#iframe").attr("src", url);
                 var header ="";
                 var parents_lis=a.parents('li');
                 var parents_as=$(parents_lis).children('a');
@@ -61,7 +52,7 @@
             if (null != url && "/" != url && "" != url && "null" != url||undefined==url) {
                 $('#sidebar li').removeClass("active");
                 $("#iframe").attr("height", 0);
-                $("#iframe").attr("src", <%=webapp%>url);
+                $("#iframe").attr("src", url);
                 var header = "<a href='#' onclick=\"setContent(null,'/page/main.jsp');\" title='去首页' class='tip-bottom'><i class='icon-home'></i>首页</a> ";
                 if(null!=name){
                     header += "<a href='#' class='current' >"+ name +"</a>";
@@ -75,7 +66,7 @@
 <body>
 <!--Header-part-->
 <div id="header">
-    <h1><a onclick="setContent(null,'/page/main.jsp');">MCMS</a></h1>
+    <h1><a onclick="setContent(null,'/page/main.jsp');">RACMS</a></h1>
 </div>
 
 <!--top-Header-menu-->
@@ -83,7 +74,7 @@
     <ul class="nav">
         <li class="dropdown" id="profile-messages"><a title="" href="#" data-toggle="dropdown"
                                                       data-target="#profile-messages" class="dropdown-toggle"><i
-                class="icon icon-user"></i> <span class="text">欢迎，<%=SessionUtil.getLgoinUserName(request)%></span><b
+                class="icon icon-user"></i> <span class="text">欢迎，{{user_name}}</span><b
                 class="caret"></b></a>
             <ul class="dropdown-menu">
                 <li><a href="#" onclick="setContent('我的资料','/page/main.jsp');"><i class="icon-user"></i>我的资料</a></li>
@@ -124,7 +115,7 @@
         <li ><a href="#" onclick="setContent(null,'/page/main.jsp');"><i class="icon icon-home"></i>
             <span>首页</span></a></li>
 
-        <%=ViewUtil.getLoginUserMenuHtml(pris)%>
+        {{user_menu_html}}
 
         <li class="content"><span>下载进度</span>
 
@@ -154,7 +145,7 @@
         <div id="breadcrumb"></div>
     </div>
     <div class="container-fluid">
-        <iframe src="<%=webapp%>/page/main.jsp" id="iframe" width="100%" onLoad="iFrameHeight()" runat="server"
+        <iframe src="/page/main.jsp" id="iframe" width="100%" onLoad="iFrameHeight()" runat="server"
                 frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"
                 allowtransparency="yes"></iframe>
     </div>
@@ -163,7 +154,7 @@
 
 <!--Footer-part-->
 <div class="row-fluid">
-    <div id="footer" class="span12"> 2014 &copy; MCMS. 版权所有 <a href="/">www.mcms.cn</a></div>
+    <div id="footer" class="span12"> 2014 &copy; ReindeerApps. 版权所有 <a href="/">www.reindeerapps.cn</a></div>
 </div>
 
 </body>

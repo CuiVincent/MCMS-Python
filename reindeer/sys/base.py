@@ -4,6 +4,7 @@ __author__ = 'CuiVincent'
 import tornado.web
 from tornado.escape import json_encode
 from app_settings import app_settings
+from reindeer.sys.exception import BusinessRuleException
 
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
@@ -12,14 +13,19 @@ class BaseHandler(tornado.web.RequestHandler):
         err_code = status_code
         msg = '系统错误'
         info = self._reason
-        if len(kwargs['exc_info']) > 1 and len(kwargs['exc_info'][1].args) > 0:
-            info = kwargs['exc_info'][1].args[0]
         back_page = app_settings["login_url"]
         if status_code == 404:
             msg = '您所访问的链接不存在'
             info = '请确认链接地址或联系管理员'
         elif status_code == 500:
-            pass
+            if len(kwargs['exc_info']) > 1 and kwargs['exc_info'][1]:
+                exception = kwargs['exc_info'][1]
+                if isinstance(exception, BusinessRuleException):
+                    err_code = exception.err_code
+                    msg = exception.msg
+                    info = exception.info
+                else:
+                    info = '[' + str(err_code) + ' - ' + info + ']' + str(exception)
         else:
             if err_code:
                 info = '[' + str(err_code) + ']' + info
@@ -29,8 +35,13 @@ class BaseHandler(tornado.web.RequestHandler):
             self.clear()  # 防止浏览器收到错误码后重定向
             self.render(err_page, err_code=err_code, msg=msg, info=info, back_page=back_page)
 
+    def get_current_user(self):
+        user_id = self.get_secure_cookie('user_id')
+        if not user_id:
+            return None
+        return user_id
+
 class ErrorHandler(BaseHandler):
-    """Generates an error response with ``status_code`` for all requests."""
     def initialize(self, status_code):
         self.set_status(status_code)
 
@@ -38,7 +49,4 @@ class ErrorHandler(BaseHandler):
         raise tornado.web.HTTPError(self._status_code)
 
     def check_xsrf_cookie(self):
-        # POSTs to an ErrorHandler don't actually have side effects,
-        # so we don't need to check the xsrf token.  This allows POSTs
-        # to the wrong url to return a 404 instead of 403.
         pass
