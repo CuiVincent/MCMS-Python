@@ -11,6 +11,14 @@ app_settings = {
     'login_url': r'/login',
     'xsrf_cookies': True,
     'static_path': path.join(path.dirname(__file__), 'res/static'),
-    'template_path': path.join(path.dirname(__file__), 'res/templates')
+    'template_path': path.join(path.dirname(__file__), 'res/template')
 }
 
+db_settings = {
+    'driven': 'MySQL',
+    'host': '192.168.174.90',
+    'user': 'racms_dba',
+    'password': 'racms_dba',
+    'port':  '3306',
+    'database': 'racms'
+}

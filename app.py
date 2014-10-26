@@ -5,10 +5,12 @@ import tornado.web
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
-import reindeer.sys.base
 from tornado.options import define, options
+
+import reindeer.sys.base_handler
 from app_settings import app_settings
 from app_urls import app_urls
+
 
 define("port", default=8000, help="run on the given port", type=int)
 
@@ -20,7 +22,7 @@ class Application(tornado.web.Application):
 application = Application(app_urls, **app_settings)
 
 if __name__ == "__main__":
-    tornado.web.ErrorHandler = reindeer.sys.base.ErrorHandler
+    tornado.web.ErrorHandler = reindeer.sys.base_handler.ErrorHandler
     tornado.options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(application)
     http_server.listen(options.port)

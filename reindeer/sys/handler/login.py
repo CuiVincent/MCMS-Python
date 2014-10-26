@@ -1,28 +1,29 @@
-from reindeer.sys.exception import BusinessRuleException
+from reindeer.util.common_util import to_md5
 
 __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
-import reindeer.sys.base
 from tornado.escape import json_encode
 
-class LoginHandler(reindeer.sys.base.BaseHandler):
+import reindeer.sys.base_handler
+from reindeer.sys.model.sys_user import SysUser
+from reindeer.sys.exceptions import BusinessRuleException
+
+
+class LoginHandler(reindeer.sys.base_handler.BaseHandler):
     def get(self):
         self.render('sys/login.html')
 
     def post(self, *args, **kwargs):
         usercode = self.get_argument('usercode')
         passwd = self.get_argument('passwd')
-        if usercode == 'cui' and passwd == '111':
-            res = {'success': True}
-            self.set_secure_cookie('user_id', str(usercode), expires_days=7)
-            self.set_secure_cookie('user_name', str(usercode), expires_days=7)
-        elif usercode == '1':
-           raise BusinessRuleException(1001)
-        elif usercode == '2':
-           raise BusinessRuleException(1002)
-        elif usercode == '3':
-           raise BusinessRuleException(1003)
+        user = SysUser.get_by_code(usercode)
+        if user:
+            if to_md5(passwd) != user.PASSWORD:
+                raise BusinessRuleException(1002)
+            elif user.ISVALID != '0':
+                raise BusinessRuleException(1003)
         else:
-           raise BusinessRuleException(1111)
-        return self.write(json_encode(res))
+            raise BusinessRuleException(1001)
+        self.set_secure_cookie('userid', str(user.ID), expires_days=7)
+        return self.write(json_encode({'success': True}))

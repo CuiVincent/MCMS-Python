@@ -4,7 +4,7 @@ __author__ = 'CuiVincent'
 import tornado.web
 from tornado.escape import json_encode
 from app_settings import app_settings
-from reindeer.sys.exception import BusinessRuleException
+from reindeer.sys.exceptions import BusinessRuleException
 
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
@@ -36,10 +36,10 @@ class BaseHandler(tornado.web.RequestHandler):
             self.render(err_page, err_code=err_code, msg=msg, info=info, back_page=back_page)
 
     def get_current_user(self):
-        user_id = self.get_secure_cookie('user_id')
-        if not user_id:
+        userid = self.get_secure_cookie('userid')
+        if not userid:
             return None
-        return user_id
+        return userid
 
 class ErrorHandler(BaseHandler):
     def initialize(self, status_code):
