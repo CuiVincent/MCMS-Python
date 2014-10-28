@@ -2,9 +2,7 @@ __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
 import tornado.web
-
 import reindeer.sys.base_handler
-
 
 class IndexHandler(reindeer.sys.base_handler.BaseHandler):
 

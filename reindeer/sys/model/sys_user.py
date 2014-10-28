@@ -6,7 +6,7 @@ __author__ = 'CuiVincent'
 
 from sqlalchemy import Column, Integer, String, DateTime
 from reindeer.util.common_util import to_md5
-from reindeer.util.database_util import  Base,db_util
+from reindeer.util.database_util import Base
 
 class SysUser(Base):
     __tablename__ = 'RA_SYS_USER'
@@ -18,25 +18,21 @@ class SysUser(Base):
     CDATE = Column(DateTime)
 
     @classmethod
-    def add(cls, CODE, NAME, PASSWORD):
-        user = SysUser()
-        user.CODE = CODE
-        user.NAME = NAME
-        user.PASSWORD = to_md5(PASSWORD) if PASSWORD else ''
-        db_util.session.add(user)
+    def add(cls, db_session, usercode, username, passwd):
+        user = SysUser(CODE=usercode, NAME=username, PASSWORD=to_md5(passwd) if passwd else '')
+        db_session.add(user)
         try:
-            db_util.session.commit()
+            db_session.commit()
         except IntegrityError:
             raise BusinessRuleException(1101)
         except:
-            db_util.session.rollback()
-
+            db_session.rollback()
         if(user.ID):
             return user
         else:
             return None
 
     @classmethod
-    def get_by_code(cls, usercode):
-        item = db_util.session.query(SysUser).filter(SysUser.CODE == usercode).first()
+    def get_by_code(cls, db_session, usercode):
+        item = db_session.query(SysUser).filter(SysUser.CODE == usercode).first()
         return item

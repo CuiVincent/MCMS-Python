@@ -17,7 +17,6 @@ def get_db_url(db_setting):
     return url
 
 class DatabaseUtil:
-
     def __init__(self):
         self.engine = create_engine(get_db_url(db_settings), pool_recycle=60, connect_args={"charset": "utf8"}, echo=True)
         self.db_session = scoped_session(sessionmaker(bind=self.engine))
@@ -30,10 +29,10 @@ class DatabaseUtil:
         Base.metadata.drop_all(bind=self.engine)
 
     @property
-    def session(self):
+    def db_session(self):
         return self.db_session
 
-db_util = DatabaseUtil()
+
 
 
 

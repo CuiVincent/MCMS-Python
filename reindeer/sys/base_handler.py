@@ -41,6 +41,10 @@ class BaseHandler(tornado.web.RequestHandler):
             return None
         return userid
 
+    @property
+    def db_session(self):
+        return self.application.db_session
+
 class ErrorHandler(BaseHandler):
     def initialize(self, status_code):
         self.set_status(status_code)
