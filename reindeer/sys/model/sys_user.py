@@ -1,16 +1,15 @@
-from sqlalchemy.exc import IntegrityError
-from reindeer.sys.exceptions import BusinessRuleException
-
 __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, String, DateTime
+from sqlalchemy.exc import IntegrityError
 from reindeer.util.common_util import to_md5
-from reindeer.util.database_util import Base
+from reindeer.sys.base_db_model import BaseDbModel
+from reindeer.sys.exceptions import BusinessRuleException
 
-class SysUser(Base):
+
+class SysUser(BaseDbModel):
     __tablename__ = 'RA_SYS_USER'
-    ID = Column(Integer, primary_key=True)
     CODE = Column(String(100), unique=True)
     NAME = Column(String(100))
     PASSWORD = Column(String(100))
@@ -18,21 +17,21 @@ class SysUser(Base):
     CDATE = Column(DateTime)
 
     @classmethod
-    def add(cls, db_session, usercode, username, passwd):
-        user = SysUser(CODE=usercode, NAME=username, PASSWORD=to_md5(passwd) if passwd else '')
-        db_session.add(user)
+    def add(cls, user_code, user_name, pass_wd):
+        user = SysUser(CODE=user_code, NAME=user_name, PASSWORD=to_md5(pass_wd) if pass_wd else '')
+        cls.db_session.add(user)
         try:
-            db_session.commit()
+            cls.db_session.commit()
         except IntegrityError:
             raise BusinessRuleException(1101)
         except:
-            db_session.rollback()
-        if(user.ID):
+            cls.db_session.rollback()
+        if (user.ID):
             return user
         else:
             return None
 
     @classmethod
-    def get_by_code(cls, db_session, usercode):
-        item = db_session.query(SysUser).filter(SysUser.CODE == usercode).first()
+    def get_by_code(cls, user_code):
+        item = cls.db_session.query(SysUser).filter(SysUser.CODE == user_code).first()
         return item

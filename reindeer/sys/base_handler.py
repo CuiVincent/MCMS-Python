@@ -6,6 +6,7 @@ from tornado.escape import json_encode
 from app_settings import app_settings
 from reindeer.sys.exceptions import BusinessRuleException
 
+
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
         self._headers
@@ -36,14 +37,11 @@ class BaseHandler(tornado.web.RequestHandler):
             self.render(err_page, err_code=err_code, msg=msg, info=info, back_page=back_page)
 
     def get_current_user(self):
-        userid = self.get_secure_cookie('userid')
-        if not userid:
+        user_id = self.get_secure_cookie('user_id')
+        if not user_id:
             return None
-        return userid
+        return user_id
 
-    @property
-    def db_session(self):
-        return self.application.db_session
 
 class ErrorHandler(BaseHandler):
     def initialize(self, status_code):
