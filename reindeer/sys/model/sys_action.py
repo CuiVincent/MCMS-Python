@@ -5,6 +5,8 @@ from sqlalchemy import Column, String, Integer
 from reindeer.sys.base_db_model import BaseDbModel
 from reindeer.sys.exceptions import BusinessRuleException
 from reindeer.util import common_util
+from reindeer.sys.model.sys_group_action import SysGroupAction
+from reindeer.sys.model.sys_group_user import SysGroupUser
 
 
 class SysAction(BaseDbModel):
@@ -43,3 +45,11 @@ class SysAction(BaseDbModel):
     def get_by_ID(cls, id):
         item = cls.db_session.query(SysAction).filter(SysAction.ID == id).first()
         return item
+
+    @classmethod
+    def get_tree_by_user_and_parent(cls, user_id, parent):
+        sql = "select concat('" + user_id + "' ,'') as user_id ,t.*  from " + SysAction.__tablename__ + "  t , (select distinct gp.ACTION id from " + SysGroupAction.__tablename__ + " gp, " + SysGroupUser.__tablename__ + " ug where ug.USER ='" + user_id + "' and ug.GROUP = gp.GROUP) b  where b.id=t.ID and t.PARENT='" + parent + "'  order by t.sort asc"
+        return cls.db_engine.execute(sql)
+
+
+

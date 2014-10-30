@@ -26,11 +26,11 @@ class SysGroupUser(BaseDbModel):
 
     def get(self):
         item = self.db_session.query(SysGroupUser).filter(
-            SysGroupUser.GROUP == self.GROUP and SysGroupUser.USER == self.USER).first()
+            SysGroupUser.GROUP == self.GROUP, SysGroupUser.USER == self.USER).first()
         return item
 
     @classmethod
     def get_by_group_and_user(cls, group, user):
         item = cls.db_session.query(SysGroupUser).filter(
-            SysGroupUser.GROUP == group and SysGroupUser.USER == user).first()
+            SysGroupUser.GROUP == group, SysGroupUser.USER == user).first()
         return item

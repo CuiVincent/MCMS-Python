@@ -26,11 +26,11 @@ class SysGroupAction(BaseDbModel):
 
     def get(self):
         item = self.db_session.query(SysGroupAction).filter(
-            SysGroupAction.GROUP == self.GROUP and SysGroupAction.ACTION == self.ACTION).first()
+            SysGroupAction.GROUP == self.GROUP, SysGroupAction.ACTION == self.ACTION).first()
         return item
 
     @classmethod
     def get_by_group_and_action(cls, group, action):
         item = cls.db_session.query(SysGroupAction).filter(
-            SysGroupAction.GROUP == group and SysGroupAction.ACTION == action).first()
+            SysGroupAction.GROUP == group, SysGroupAction.ACTION == action).first()
         return item
