@@ -16,15 +16,15 @@ class LoginHandler(reindeer.sys.base_handler.BaseHandler):
     def post(self, *args, **kwargs):
         user_code = self.get_argument('user_code')
         pass_wd = self.get_argument('pass_wd')
-        # SysUser.add(user_code,"宫本武藏",pass_wd)
-        # SysGroup.add(user_code,"新撰组")
+
         user = SysUser.get_by_code(user_code)
         if user:
             if to_md5(pass_wd) != user.PASSWORD:
                 raise BusinessRuleException(1002)
-            elif user.ISVALID != '0':
+            elif user.STATUS != 1:
                 raise BusinessRuleException(1003)
         else:
             raise BusinessRuleException(1001)
         self.set_secure_cookie('user_id', str(user.ID), expires_days=7)
+        self.set_secure_cookie('user_name', str(user.NAME), expires_days=7)
         return self.write(json_encode({'success': True}))

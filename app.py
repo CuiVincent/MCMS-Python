@@ -23,6 +23,7 @@ class Application(tornado.web.Application):
         self.db_instance = DatabaseInstance(db_settings, BaseDbModel)
         Application.instance = self
         DatabaseUtil.create_all_table(self.db_instance)
+        # DatabaseUtil.init_database_data()
 
     @classmethod
     def instance(cls):

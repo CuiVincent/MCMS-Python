@@ -1,9 +1,17 @@
 __author__ = 'CuiVincent'
+# -*- coding: utf8 -*-
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from app_settings import db_settings
+from reindeer.sys.model.sys_group import SysGroup
+from reindeer.sys.model.sys_user import SysUser
+from reindeer.util.common_util import to_md5
+from reindeer.sys.model.sys_action import SysAction
+from reindeer.sys.model.sys_group_user import SysGroupUser
+from reindeer.sys.model.sys_group_action import SysGroupAction
+from reindeer.util import common_util
 
 
 class DatabaseInstance:
@@ -22,7 +30,7 @@ class DatabaseInstance:
         new_classes = not isinstance(base_db_model_class, list) and [
             base_db_model_class] or base_db_model_class
         for clazz in new_classes:
-            if clazz not in  self.__base_db_model_classes:
+            if clazz not in self.__base_db_model_classes:
                 clazz.db_session = self.__db_session
                 self.__base_db_model_classes.append(clazz)
 
@@ -72,6 +80,20 @@ class DatabaseUtil:
     def drop_all_table(db_instance):
         for clazz in db_instance.base_db_model_classes:
             clazz.drop_all(bind=db_instance.db_engine)
+
+    @staticmethod
+    def init_database_data():
+        user_id = SysUser.add('reindeer', '超级管理员', to_md5('111')).ID
+        group_id = SysGroup.add('admin', '系统管理组').ID
+        SysGroupUser.add(user_id, group_id)
+        sys_action_id = SysAction.add(name='系统管理', url='sys_manager', parent=common_util.action_root_main_parent, sort=1).ID
+        sys_action_group_id = SysAction.add(name='用户组管理', url='01', parent=sys_action_id, sort=1).ID
+        sys_action_user_id = SysAction.add(name='用户限管理', url='02', parent=sys_action_id, sort=2).ID
+        sys_action_action_id = SysAction.add(name='操作权限管理', url='03', parent=sys_action_id, sort=3).ID
+        app_action_id = SysAction.add(name='App管理', url='app_manager', parent=common_util.action_root_main_parent, sort=2).ID
+        app_action_platform_id = SysAction.add(name='平台管理', url='12', parent=app_action_id, sort=1).ID
+        SysGroupAction.add(group_id, [sys_action_id,sys_action_group_id,sys_action_user_id,sys_action_action_id])
+        SysGroupAction.add(group_id, [app_action_id,app_action_platform_id])
 
 
 
