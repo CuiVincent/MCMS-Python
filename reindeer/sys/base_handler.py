@@ -3,18 +3,16 @@ __author__ = 'CuiVincent'
 
 import tornado.web
 from tornado.escape import json_encode
-from app_settings import app_settings
 from reindeer.sys.exceptions import BusinessRuleException
 
 
 class BaseHandler(tornado.web.RequestHandler):
     def write_error(self, status_code, **kwargs):
-        self._headers
         err_page = 'sys/error.html'
         err_code = status_code
         msg = '系统错误'
         info = self._reason
-        back_page = app_settings["login_url"]
+        back_page = self.application.settings["login_url"]
         if status_code == 404:
             msg = '您所访问的链接不存在'
             info = '请确认链接地址或联系管理员'

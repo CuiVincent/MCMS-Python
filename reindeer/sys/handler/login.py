@@ -4,7 +4,6 @@ __author__ = 'CuiVincent'
 from tornado.escape import json_encode
 import reindeer.sys.base_handler
 from reindeer.sys.model.sys_user import SysUser
-from reindeer.sys.model.sys_group import SysGroup
 from reindeer.sys.exceptions import BusinessRuleException
 from reindeer.util.common_util import to_md5
 

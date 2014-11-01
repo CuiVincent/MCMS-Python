@@ -5,6 +5,7 @@ import base64
 import uuid
 from os import path
 
+
 app_settings = {
     'debug': False,
     'cookie_secret': base64.b64encode(uuid.uuid4().bytes + uuid.uuid4().bytes),
@@ -19,6 +20,6 @@ db_settings = {
     'host': '192.168.174.90',
     'user': 'racms_dba',
     'password': 'racms_dba',
-    'port':  '3306',
+    'port': '3306',
     'database': 'racms'
 }
