@@ -10,12 +10,14 @@ from reindeer.util.common_util import to_md5
 
 class LoginHandler(reindeer.sys.base_handler.BaseHandler):
     def get(self):
-        self.render('sys/login.html')
+        if not self.get_current_user():
+            self.render('sys/login.html')
+        else:
+            self.redirect('/')
 
     def post(self, *args, **kwargs):
         user_code = self.get_argument('user_code')
         pass_wd = self.get_argument('pass_wd')
-
         user = SysUser.get_by_code(user_code)
         if user:
             if to_md5(pass_wd) != user.PASSWORD:
@@ -25,5 +27,11 @@ class LoginHandler(reindeer.sys.base_handler.BaseHandler):
         else:
             raise BusinessRuleException(1001)
         self.set_secure_cookie('user_id', str(user.ID), expires_days=7)
-        # self.set_secure_cookie('user_name', str(user.NAME), expires_days=7) cookie中文问题？
+        # self.set_secure_cookie('user_name', str(user.NAME), expires_days=7)
         return self.write(json_encode({'success': True}))
+
+
+class LogoutHandler(reindeer.sys.base_handler.BaseHandler):
+    def get(self):
+        self.clear_cookie('user_id')
+        self.render('sys/login.html')

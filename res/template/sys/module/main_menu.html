@@ -9,7 +9,7 @@
         {% else %}
             {% set icon = 'icon-folder-close' %}
         {% end %}
-        {% set onclick = "setContentByMenu('menu_"+menu['v_id']+"','menu_"+menu['url']+"');" %}
+        {% set onclick = "setContentByMenu('menu_"+menu['v_id']+"','"+menu['url']+"');" %}
         {% if len(menu['children']) >0 %}
         <li  class='submenu' >
             <a id="menu_{{menu['v_id']}}" href="#" onclick="{{onclick}}"><i class='icon {{icon}}'></i> <span>{{menu['name']}}</span><span class='label label-important'>{{len(menu['children'])}}</span></a>

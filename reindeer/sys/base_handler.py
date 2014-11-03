@@ -12,9 +12,9 @@ class BaseHandler(tornado.web.RequestHandler):
         err_code = status_code
         msg = '系统错误'
         info = self._reason
-        back_page = self.application.settings["login_url"]
+        # back_page = self.application.settings["login_url"]
         if status_code == 404:
-            msg = '您所访问的链接不存在'
+            msg = '您所访问的链接['+self.request.uri+']不存在'
             info = '请确认链接地址或联系管理员'
         elif status_code == 500:
             if len(kwargs['exc_info']) > 1 and kwargs['exc_info'][1]:
@@ -32,7 +32,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.write(json_encode({'success': False, 'err_code': err_code, 'msg': msg, 'info': info}))
         else:
             self.clear()  # 防止浏览器收到错误码后重定向
-            self.render(err_page, err_code=err_code, msg=msg, info=info, back_page=back_page)
+            self.render(err_page, err_code=err_code, msg=msg, info=info)
 
     def get_current_user(self):
         user_id = self.get_secure_cookie('user_id')
