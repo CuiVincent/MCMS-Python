@@ -39,3 +39,8 @@ class SysUser(BaseDbModel):
     def get_by_id(cls, user_ID):
         item = cls.db_session.query(SysUser).filter(SysUser.ID == user_ID).first()
         return item
+
+    @classmethod
+    def get_all(cls):
+        item = cls.db_session.query(SysUser).all()
+        return item

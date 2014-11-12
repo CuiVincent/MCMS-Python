@@ -10,6 +10,7 @@ from reindeer.sys import strings
 class IndexHandler(reindeer.sys.base_handler.BaseHandler):
     @tornado.web.authenticated
     def get(self):
+        user = self.get_current_user()
         user_name = self.get_current_user().NAME
         self.render('sys/index.html', user_name=user_name, main_menu=self.get_user_main_menu(),
                     main_page='sys/main.html', logout_url='logout')

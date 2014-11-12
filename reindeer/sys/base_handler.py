@@ -35,17 +35,9 @@ class BaseHandler(tornado.web.RequestHandler):
             self.clear()  # 防止浏览器收到错误码后重定向
             self.render(err_page, err_code=err_code, msg=msg, info=info)
 
-    @classmethod
-    def set_current_user(cls, user_id):
-        cls.current_user = SysUser.get_by_id(user_id)
-
     def get_current_user(self):
         user_id = self.get_secure_cookie('user_id')
-        if user_id:
-            if not BaseHandler.current_user:
-                BaseHandler.set_current_user(user_id)
-            return BaseHandler.current_user
-        return None
+        return SysUser.get_by_id(user_id)
 
 
 class ErrorHandler(BaseHandler):

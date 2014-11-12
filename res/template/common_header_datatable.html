@@ -1,0 +1,48 @@
+    <script>
+$(document).ready(function(){
+	$('.data-table').dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers",
+		"sDom": '<""l>t<"F"fp>',
+        "bStateSave": true, //保存状态到cookie
+        "bInfo": true,//页脚信息
+        "bLengthChange": true, //改变每页显示数据数量
+        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "全部"]],
+        "bAutoWidth":true,
+        "oLanguage": {
+             "sProcessing": "正在加载",
+             "sLengthMenu": "每页 _MENU_ 条记录",
+             "sZeroRecords": "未找到相关记录",
+             "sEmptyTable": "无记录",
+             "sInfo": "从 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+             "sInfoFiltered": "共 _MAX_ 条记录",
+             "sSearch": "检索",
+             "oPaginate": {
+                 "sFirst": "首页",
+                 "sPrevious": "上一页",
+                 "sNext": "下一页",
+                 "sLast": "末页"
+             }
+
+        }
+	});
+
+	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+
+	$('select').select2({minimumResultsForSearch:10});
+
+	$("span.icon input:checkbox, th input:checkbox").click(function() {
+		var checkedStatus = this.checked;
+		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');
+		checkbox.each(function() {
+			this.checked = checkedStatus;
+			if (checkedStatus == this.checked) {
+				$(this).closest('.checker > span').removeClass('checked');
+			}
+			if (this.checked) {
+				$(this).closest('.checker > span').addClass('checked');
+			}
+		});
+	});
+});
+    </script>

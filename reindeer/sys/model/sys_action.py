@@ -29,7 +29,7 @@ class SysAction(BaseDbModel):
                            ICON_TYPE=icon_type,
                            ICON=icon)
         if not str(action.PARENT).startswith(strings.action_root_prefix):
-            if not cls.get_by_ID(action.PARENT):
+            if not cls.get_by_id(action.PARENT):
                 raise BusinessRuleException(1101)
         cls.db_session.add(action)
         try:
@@ -43,7 +43,7 @@ class SysAction(BaseDbModel):
 
 
     @classmethod
-    def get_by_ID(cls, id):
+    def get_by_id(cls, id):
         item = cls.db_session.query(SysAction).filter(SysAction.ID == id).first()
         return item
 
@@ -54,7 +54,8 @@ class SysAction(BaseDbModel):
         # ID | C_USER | C_DATE | NAME | TYPE | URL | DES | PARENT | LOG | SORT | ICON_TYPE | ICON
         actions = []
         for r in rows:
-            actions.append({'id': r[0], 'v_id': str(uuid.uuid1()), 'name': r[3], 'url': r[5], 'icon_type': r[10], 'icon': r[11],
-                        'children': SysAction.get_action_tree_by_user_and_parent(user_id,  r[0], type)})
+            actions.append(
+                {'id': r[0], 'v_id': str(uuid.uuid1()), 'name': r[3], 'url': r[5], 'icon_type': r[10], 'icon': r[11],
+                 'children': SysAction.get_action_tree_by_user_and_parent(user_id, r[0], type)})
         return actions
 
