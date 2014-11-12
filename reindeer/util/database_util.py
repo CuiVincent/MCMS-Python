@@ -88,11 +88,11 @@ class DatabaseUtil:
         SysGroupUser.add(group_id, user_id)
         sys_action_id = SysAction.add(name='系统管理', url='sys_manager', parent=strings.action_root_main_parent,
                                       sort=1, icon='icon-folder-close').ID
-        sys_action_group_id = SysAction.add(name='用户组管理', url='01', parent=sys_action_id, sort=1,
+        sys_action_group_id = SysAction.add(name='用户组管理', url='group_list', parent=sys_action_id, sort=1,
                                             icon='icon-user').ID
-        sys_action_user_id = SysAction.add(name='用户管理', url='02', parent=sys_action_id, sort=2,
+        sys_action_user_id = SysAction.add(name='用户管理', url='user_list', parent=sys_action_id, sort=2,
                                            icon='icon-user').ID
-        sys_action_action_id = SysAction.add(name='操作权限管理', url='03', parent=sys_action_id, sort=3,
+        sys_action_action_id = SysAction.add(name='操作权限管理', url='action_list', parent=sys_action_id, sort=3,
                                              icon='icon-folder-close').ID
         app_action_id = SysAction.add(name='App管理', url='app_manager', parent=strings.action_root_main_parent,
                                       sort=2, icon='icon-folder-close').ID

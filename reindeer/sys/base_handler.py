@@ -4,6 +4,7 @@ __author__ = 'CuiVincent'
 import tornado.web
 from tornado.escape import json_encode
 from reindeer.sys.exceptions import BusinessRuleException
+from reindeer.sys.model.sys_user import SysUser
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -14,7 +15,7 @@ class BaseHandler(tornado.web.RequestHandler):
         info = self._reason
         # back_page = self.application.settings["login_url"]
         if status_code == 404:
-            msg = '您所访问的链接['+self.request.uri+']不存在'
+            msg = '您所访问的链接[' + self.request.uri + ']不存在'
             info = '请确认链接地址或联系管理员'
         elif status_code == 500:
             if len(kwargs['exc_info']) > 1 and kwargs['exc_info'][1]:
@@ -34,9 +35,17 @@ class BaseHandler(tornado.web.RequestHandler):
             self.clear()  # 防止浏览器收到错误码后重定向
             self.render(err_page, err_code=err_code, msg=msg, info=info)
 
+    @classmethod
+    def set_current_user(cls, user_id):
+        cls.current_user = SysUser.get_by_id(user_id)
+
     def get_current_user(self):
         user_id = self.get_secure_cookie('user_id')
-        return user_id
+        if user_id:
+            if not BaseHandler.current_user:
+                BaseHandler.set_current_user(user_id)
+            return BaseHandler.current_user
+        return None
 
 
 class ErrorHandler(BaseHandler):

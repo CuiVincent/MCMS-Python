@@ -26,8 +26,9 @@ class LoginHandler(reindeer.sys.base_handler.BaseHandler):
                 raise BusinessRuleException(1003)
         else:
             raise BusinessRuleException(1001)
+
         self.set_secure_cookie('user_id', str(user.ID), expires_days=7)
-        # self.set_secure_cookie('user_name', str(user.NAME), expires_days=7)
+        reindeer.sys.base_handler.BaseHandler.set_current_user(str(user.ID))
         return self.write(json_encode({'success': True}))
 
 
