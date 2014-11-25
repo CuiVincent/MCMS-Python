@@ -37,8 +37,6 @@ function initDataTable(table,url,columns){
 function initTableCheckBox(){
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
 
-
-
 	$("span.icon input:checkbox, th input:checkbox").click(function() {
 		var checkedStatus = this.checked;
 		var checkbox = $(this).parents('.widget-box').find('tr td:first-child input:checkbox');
