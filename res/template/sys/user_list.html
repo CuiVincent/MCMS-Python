@@ -4,16 +4,32 @@
     <title></title>
     {% include '../matrix_header_page_table.html' %}
     {% include '../common_header_datatable.html' %}
+<script>
+$(document).ready(function(){
+    initDataTable($('#table'),"user_list",[
+			{ "mDataProp": "CODE" },
+            { "mDataProp": "NAME" },
+            { "mDataProp": "STATUS" },
+            { "mDataProp": "C_USER" },
+            { "mDataProp": "C_DATE" }
+    ]);
+    initTableCheckBox();
+});
+</script>
 </head>
 <body>
-         <div class="widget-box">
+        <br/>
+        <h4>用户管理</h4>
+        <hr/>
+        <div class="widget-box">
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-            <h5>用户列表</h5>
+            <h5>用户管理</h5>
           </div>
           <div class="widget-content nopadding">
-            <table class="table table-bordered data-table">
+            <table id="table" class="table table-bordered data-table with-check">
               <thead>
                 <tr>
+                  <!--<th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>-->
                   <th>用户名</th>
                   <th>昵称</th>
                   <th>状态</th>
@@ -22,18 +38,10 @@
                 </tr>
               </thead>
               <tbody>
-              {% for user in users %}
-                <tr>
-                  <td>{{user.CODE}}</td>
-                  <td>{{user.NAME}}</td>
-                  <td>{{user.STATUS}}</td>
-                  <td>{{user.C_USER}}</td>
-                  <td>{{user.C_DATE}}</td>
-                </tr>
-              {% end %}
               </tbody>
             </table>
           </div>
         </div>
+<!--<button onclick="parent.iFrameHeight()">11</button>-->
 </body>
 </html>

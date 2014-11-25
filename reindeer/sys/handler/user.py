@@ -5,8 +5,10 @@ import reindeer.sys.base_handler
 from reindeer.sys.model.sys_user import SysUser
 
 
-class UserHandler(reindeer.sys.base_handler.BaseHandler):
+class UserListHandler(reindeer.sys.base_handler.BaseHandler):
     def get(self):
-        users = SysUser.get_all()
-        self.render('sys/user_list.html', users=users)
+        self.render('sys/user_list.html')
 
+    def post(self):
+        json = SysUser.get_all_json()
+        return self.write('{"success": true, "aaData":'+json+'}')

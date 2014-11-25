@@ -1,5 +1,5 @@
 function doAjaxCommit( url, param, onSuccess,onError) {
-    jQuery.ajax({
+    return jQuery.ajax({
         type: "POST",
         url: url,
         data: param,
@@ -78,4 +78,12 @@ function getQueryStrFomForm(fm)
         str = str.substring(1,str.length);
     }
     return str;
+}
+
+/**
+ * 获取Cookie
+ */
+function getCookie ( name ) {
+     var c = document . cookie . match ( "\\b" + name + "=([^;]*)\\b" ) ;
+     return c ? c [ 1 ] : undefined ;
 }

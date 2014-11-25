@@ -4,8 +4,9 @@ __author__ = 'CuiVincent'
 from sqlalchemy import Column, String, Integer
 from sqlalchemy.exc import IntegrityError
 from reindeer.util.common_util import to_md5
-from reindeer.sys.base_db_model import BaseDbModel
+from reindeer.sys.base_db_model import BaseDbModel, new_alchemy_encoder
 from reindeer.sys.exceptions import BusinessRuleException
+import json
 
 
 class SysUser(BaseDbModel):
@@ -44,3 +45,11 @@ class SysUser(BaseDbModel):
     def get_all(cls):
         item = cls.db_session.query(SysUser).all()
         return item
+
+    @classmethod
+    def get_all_json(cls):
+        r_json = []
+        items = SysUser.get_all()
+        for item in items:
+            r_json.append(item)
+        return json.dumps(r_json, cls=new_alchemy_encoder(), check_circular=False)

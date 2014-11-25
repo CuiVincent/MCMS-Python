@@ -12,7 +12,7 @@ sys_urls = [
     (r'/content/(.*)', index.ContentHandler),
     (app_settings['login_url'], login.LoginHandler),
     (r'/logout', login.LogoutHandler),
-    (r'/user_list', user.UserHandler)
+    (r'/user_list', user.UserListHandler)
 
 ]
 
