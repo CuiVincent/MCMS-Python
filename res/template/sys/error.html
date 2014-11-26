@@ -2,6 +2,18 @@
 <head>
     <title>系统错误</title>
         {% include '../matrix_header_page_min.html' %}
+    <script>
+        function back(){
+            history.back();
+        }
+        function toPage(url) {
+            try {
+                parent.toPage(url);
+            } catch (e) {
+                location.href = url;
+            }
+        }
+    </script>
 </head>
 <body>
 <!--Action boxes-->
@@ -13,13 +25,13 @@
             </div>
             <div class="widget-content">
                 <div class="error_ex">
-                    <h1>{{err_code}}</h1>
+                    <h1>{{err_title}}</h1>
 
                     <h3>{{msg}}</h3>
 
                     <p>{{info}}</p>
 
-                    <a class="btn btn-warning btn-big" onclick="history.back();">返回</a></div>
+                    <a class="btn btn-warning btn-big" onclick="{{func}}">{{func_text}}</a></div>
             </div>
         </div>
     </div>

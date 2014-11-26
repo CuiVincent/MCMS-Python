@@ -22,7 +22,7 @@ class IndexHandler(reindeer.sys.base_handler.BaseHandler):
 
 
 class ContentHandler(reindeer.sys.base_handler.BaseHandler):
-    @tornado.web.authenticated
+    @reindeer.sys.base_handler.authenticated
     def get(self, url):
         if url and url.lower().endswith('.html'):
             try:

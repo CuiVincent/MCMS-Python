@@ -5,6 +5,7 @@ import tornado.web
 from tornado.escape import json_encode
 from reindeer.sys.exceptions import BusinessRuleException
 from reindeer.sys.model.sys_user import SysUser
+import functools
 
 
 class BaseHandler(tornado.web.RequestHandler):
@@ -13,7 +14,6 @@ class BaseHandler(tornado.web.RequestHandler):
         err_code = status_code
         msg = '系统错误'
         info = self._reason
-        # back_page = self.application.settings["login_url"]
         if status_code == 404:
             msg = '您所访问的链接[' + self.request.uri + ']不存在'
             info = '请确认链接地址或联系管理员'
@@ -33,7 +33,17 @@ class BaseHandler(tornado.web.RequestHandler):
             self.write(json_encode({'success': False, 'err_code': err_code, 'msg': msg, 'info': info}))
         else:
             self.clear()  # 防止浏览器收到错误码后重定向
-            self.render(err_page, err_code=err_code, msg=msg, info=info)
+            if err_code >= 1000:
+                err_title = 'ERROR'
+            else:
+                err_title = str(err_code)
+            if err_code == 1000:
+                func = 'toPage("'+self.application.settings["login_url"]+'");'
+                func_text = '登录'
+            else:
+                func = 'back();'
+                func_text = '返回'
+            self.render(err_page, err_title=err_title, msg=msg, info=info, func=func, func_text=func_text)
 
     def get_current_user(self):
         user_id = self.get_secure_cookie('user_id')
@@ -49,3 +59,12 @@ class ErrorHandler(BaseHandler):
 
     def check_xsrf_cookie(self):
         pass
+
+
+def authenticated(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        if not self.current_user:
+            raise BusinessRuleException(1000)
+        return method(self, *args, **kwargs)
+    return wrapper
