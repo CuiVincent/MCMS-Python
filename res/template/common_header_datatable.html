@@ -1,38 +1,87 @@
 {% include './common_header_gritter.html' %}
 <script>
+$.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallback, bStandingRedraw )
+{
+    if ( sNewSource !== undefined && sNewSource !== null ) {
+        oSettings.sAjaxSource = sNewSource;
+    }
+    // Server-side processing should just call fnDraw
+    if ( oSettings.oFeatures.bServerSide ) {
+        this.fnDraw();
+        return;
+    }
+    this.oApi._fnProcessingDisplay( oSettings, true );
+    var that = this;
+    var iStart = oSettings._iDisplayStart;
+    var aData = [];
+    this.oApi._fnServerParams( oSettings, aData );
+    oSettings.fnServerData.call( oSettings.oInstance, oSettings.sAjaxSource, aData, function(json) {
+        /* Clear the old information from the table */
+        that.oApi._fnClearTable( oSettings );
+        /* Got the data - add it to the table */
+        var aData =  (oSettings.sAjaxDataProp !== "") ?
+            that.oApi._fnGetObjectDataFn( oSettings.sAjaxDataProp )( json ) : json;
+        for ( var i=0 ; i<aData.length ; i++ )
+        {
+            that.oApi._fnAddData( oSettings, aData[i] );
+        }
+        oSettings.aiDisplay = oSettings.aiDisplayMaster.slice();
+        that.fnDraw();
+        if ( bStandingRedraw === true )
+        {
+            oSettings._iDisplayStart = iStart;
+            that.oApi._fnCalculateEnd( oSettings );
+            that.fnDraw( false );
+        }
+        that.oApi._fnProcessingDisplay( oSettings, false );
+        /* Callback user function - for event handlers etc */
+        if ( typeof fnCallback == 'function' && fnCallback !== null )
+        {
+            fnCallback( oSettings );
+        }
+    }, oSettings );
+};
+
 function initDataTable(table,url,columns){
-        table.dataTable({
-		"bJQueryUI": true,
-		"sPaginationType": "full_numbers",
-		"sDom": '<""l>t<"F"fp>',
-        //"bStateSave": true, //保存状态到cookie
-        "bInfo": true,//页脚信息
-        "bLengthChange": true, //改变每页显示数据数量
-        "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "全部"]],
-        "bAutoWidth":true,
-        "oLanguage": {
-             "sProcessing": "正在加载",
-             "sLengthMenu": "           _MENU_",
-             "sZeroRecords": "未找到相关记录",
-             "sEmptyTable": "无记录",
-             "sInfo": "从 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
-             "sInfoFiltered": "共 _MAX_ 条记录",
-             "sSearch": "检索",
-             "oPaginate": {
-                 "sFirst": "首页",
-                 "sPrevious": "上一页",
-                 "sNext": "下一页",
-                 "sLast": "末页"
-             }
-        },"sAjaxSource": url,
-        //"bServerSide": true, //是否启用办事器处理惩罚数据源
-		"fnServerData": function ( sSource, aoData, fnCallback , oSettings) {
-            aoData.push({name:"_xsrf",value:getCookie ( "_xsrf" )});
-            oSettings.jqXHR = ajaxCommitWithGritter( url,aoData,fnCallback);
-        },
-		"aoColumns": columns
-	});
-    $('select').select2({minimumResultsForSearch:10});
+    return table.dataTable({
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "sDom": '<""l>t<"F"fp>',
+            //"bStateSave": true, //保存状态到cookie
+            "bInfo": true,//页脚信息
+            "bLengthChange": true, //改变每页显示数据数量
+            "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "全部"]],
+            "bAutoWidth":true,
+            "oLanguage": {
+                 "sProcessing": "正在加载",
+                 "sLengthMenu": "           _MENU_",
+                 "sZeroRecords": "未找到相关记录",
+                 "sEmptyTable": "无记录",
+                 "sInfo": "从 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
+                 "sInfoFiltered": "共 _MAX_ 条记录",
+                 "sSearch": "检索",
+                 "oPaginate": {
+                     "sFirst": "首页",
+                     "sPrevious": "上一页",
+                     "sNext": "下一页",
+                     "sLast": "末页"
+                 }
+            },"sAjaxSource": url,
+            //"bServerSide": true, //是否启用办事器处理惩罚数据源
+            "fnServerData": function ( sSource, aoData, fnCallback , oSettings) {
+                //aoData.push ({name:"_rt",value:Math.floor(Math.random()*1000)});
+                oSettings.jqXHR = ajaxCommitWithGritter( url,aoData,fnCallback);
+            },
+            "aoColumns": columns,
+            "fnDrawCallback": function (oSettings) {
+                try {
+                    parent.iFrameHeight();
+                } catch (e) {
+                }
+            },"fnInitComplete": function(oSettings, json) {
+                $('select').select2({minimumResultsForSearch:10});
+            }
+        });
 }
 function initTableCheckBox(){
 	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();

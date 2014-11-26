@@ -5,14 +5,18 @@
     {% include '../matrix_header_page_table.html' %}
     {% include '../common_header_datatable.html' %}
 <script>
-$(document).ready(function(){
-    initDataTable($('#table'),"user_list",[
+var datatable;
+function initTable(){
+        datatable=initDataTable($('#table'),"user_list",[
 			{ "mDataProp": "CODE" },
             { "mDataProp": "NAME" },
             { "mDataProp": "STATUS" },
             { "mDataProp": "C_USER" },
             { "mDataProp": "C_DATE" }
     ]);
+}
+$(document).ready(function(){
+    initTable();
     initTableCheckBox();
 });
 </script>
@@ -42,6 +46,8 @@ $(document).ready(function(){
             </table>
           </div>
         </div>
-<!--<button onclick="parent.iFrameHeight()">11</button>-->
+<button onclick="ajaxCommitWithGritter( 'user_add',null,initTable);">新建</button>
+<button onclick="datatable.fnReloadAjax();">刷新</button>
+
 </body>
 </html>
