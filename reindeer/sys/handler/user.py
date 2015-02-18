@@ -3,6 +3,7 @@ __author__ = 'CuiVincent'
 
 import reindeer.sys.base_handler
 from reindeer.sys.model.sys_user import SysUser
+from reindeer.sys.model.sys_group import SysGroup
 from tornado.escape import json_encode
 
 
@@ -20,5 +21,5 @@ class UserAddHandler(reindeer.sys.base_handler.BaseHandler):
         self.render('sys/user_add.html')
 
     def post(self):
-        SysUser.add("FFFF","FFFFFFF","111");
+        SysUser.add("FFFF","FFFFFFF","111")
         return self.write(json_encode({'success': True}))
