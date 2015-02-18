@@ -8,16 +8,24 @@
 var datatable;
 function initTable(){
         datatable = initDataTable($('#table'),"user_list",[
-			{ "mDataProp": "CODE" },
-            { "mDataProp": "NAME" },
-            { "mDataProp": "STATUS" },
+            { "mDataProp": "ID","sWidth" : "2%","bSortable": false,"bSearchable": false,
+					  "mRender": function (data, type, full) {
+							 return '<input id="'+data+'" type="checkbox" />'
+					  }},
+            { "mDataProp": "CODE","sWidth" : "20%" },
+            { "mDataProp": "NAME","sWidth" : "20%" },
+            { "mDataProp": "STATUS" ,
+					  "mRender": function (data, type, full) {
+						  if(data=='1'){ return '正常';}
+                          else if(data=='2'){ return '已删除';}
+                          return '已禁用';
+					  }},
             { "mDataProp": "C_USER" },
             { "mDataProp": "C_DATE" }
     ],true,[[ 4, "desc" ]]);
 }
 $(document).ready(function(){
     initTable();
-    initTableCheckBox();
 });
 </script>
 </head>
@@ -28,12 +36,19 @@ $(document).ready(function(){
         <div class="widget-box">
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
             <h5>用户管理</h5>
+              <div class="button-label">
+                <button class="btn btn-primary btn-title" onclick="ajaxCommitWithGritter( 'user_add',null,initTable);">新建</button>
+                <button class="btn btn-info btn-title" onclick="datatable.fnReloadAjax();">编辑</button>
+                <button class="btn btn-danger btn-title" onclick="datatable.fnReloadAjax();">删除</button>
+                <button class="btn btn-success btn-title" onclick="datatable.fnReloadAjax();">刷新</button>
+              </div>
           </div>
+
           <div class="widget-content nopadding">
             <table id="table" class="table table-bordered data-table with-check">
               <thead>
                 <tr>
-                  <!--<th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>-->
+                  <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
                   <th>用户名</th>
                   <th>昵称</th>
                   <th>状态</th>
@@ -46,8 +61,5 @@ $(document).ready(function(){
             </table>
           </div>
         </div>
-<button onclick="ajaxCommitWithGritter( 'user_add',null,initTable);">新建</button>
-<button onclick="datatable.fnReloadAjax();">刷新</button>
-
 </body>
 </html>

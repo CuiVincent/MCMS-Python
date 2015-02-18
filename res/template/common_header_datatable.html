@@ -86,13 +86,14 @@ function initDataTable(table,url,columns,serverSide,defSort){
                     parent.iFrameHeight();
                 } catch (e) {
                 }
+                initTableCheckBox();
             },"fnInitComplete": function(oSettings, json) {
                 $('select').select2({minimumResultsForSearch:10});
             }
         });
 }
 function initTableCheckBox(){
-	$('input[type=checkbox],input[type=radio],input[type=file]').uniform();
+	$('input[type=checkbox][style!="opacity: 0;"]').uniform();
 
 	$("span.icon input:checkbox, th input:checkbox").click(function() {
 		var checkedStatus = this.checked;

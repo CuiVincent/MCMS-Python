@@ -64,16 +64,18 @@ class SysUser(BaseDbModel):
     @classmethod
     def get_slice(cls, like, start, stop, sort_col, sort_dir):
         sort_cols = {
-            u'0': SysUser.CODE,
-            u'1': SysUser.NAME,
-            u'2': SysUser.STATUS,
-            u'3': SysUser.C_USER,
-            u'4': SysUser.C_DATE
+            u'1': SysUser.CODE,
+            u'2': SysUser.NAME,
+            u'3': SysUser.STATUS,
+            u'4': SysUser.C_USER,
+            u'5': SysUser.C_DATE
         }
         order_by = -sort_cols[sort_col] if sort_dir == 'desc' else sort_cols[sort_col]
         item = cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%")))
-        item = item.order_by(order_by)
-        item = item.slice(start, stop)
+        if order_by is not None:
+            item = item.order_by(order_by)
+        if stop-start >= 0:
+            item = item.slice(start, stop)
         return item.all()
 
     @classmethod

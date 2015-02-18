@@ -8,8 +8,8 @@
 var datatable;
 function initTable(){
         datatable = initDataTable($('#table'),"group_list",[
-            { "mDataProp": "NAME" },
-            { "mDataProp": "DES" },
+            { "mDataProp": "NAME","sWidth" : "25%" },
+            { "mDataProp": "DES","sWidth" : "25%" },
             { "mDataProp": "C_USER" },
             { "mDataProp": "C_DATE" }
     ],false);
@@ -44,7 +44,5 @@ $(document).ready(function(){
             </table>
           </div>
         </div>
-<button onclick="datatable.fnReloadAjax();">刷新</button>
-
 </body>
 </html>
