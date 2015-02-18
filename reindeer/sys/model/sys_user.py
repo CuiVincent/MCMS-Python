@@ -25,7 +25,7 @@ class SysUser(BaseDbModel):
         except IntegrityError:
             cls.db_session.rollback()
             raise BusinessRuleException(1051)
-            # 先回滚再抛出异常，否则会滚会失败
+            # 先回滚再抛出异常，否则回滚不会执行
         except:
             cls.db_session.rollback()
         if (user.ID):

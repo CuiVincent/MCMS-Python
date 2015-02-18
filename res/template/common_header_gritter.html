@@ -38,13 +38,22 @@
                 classname='gritter-orange';
             }
 
-            // === jQeury Gritter, a growl-like notifications === //
-            $.gritter.add({
-                title:	title,
-                text:	msg,
-                image: 	"{{ static_url('img/icon/') }}"+icon,
-                sticky: false,
-                class_name:classname
-            });
+            try{
+                parent.$.gritter.add({
+                    title:	title,
+                    text:	msg,
+                    image: 	"{{ static_url('img/icon/') }}"+icon,
+                    sticky: false,
+                    class_name:classname
+                });
+            }catch (e){
+                $.gritter.add({
+                    title:	title,
+                    text:	msg,
+                    image: 	"{{ static_url('img/icon/') }}"+icon,
+                    sticky: false,
+                    class_name:classname
+                });
+            }
         }
     </script>
