@@ -1,7 +1,7 @@
 __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, or_
 from sqlalchemy.exc import IntegrityError
 from reindeer.util.common_util import to_md5
 from reindeer.sys.base_db_model import BaseDbModel, new_alchemy_encoder
@@ -55,3 +55,36 @@ class SysUser(BaseDbModel):
         for item in items:
             r_json.append(item)
         return json.dumps(r_json, cls=new_alchemy_encoder(), check_circular=False)
+
+    @classmethod
+    def get_all_count(cls):
+        items = SysUser.get_all()
+        return len(items)
+
+    @classmethod
+    def get_slice(cls, like, start, stop, sort_col, sort_dir):
+        sort_cols = {
+            u'0': SysUser.CODE,
+            u'1': SysUser.NAME,
+            u'2': SysUser.STATUS,
+            u'3': SysUser.C_USER,
+            u'4': SysUser.C_DATE
+        }
+        order_by = -sort_cols[sort_col] if sort_dir == 'desc' else sort_cols[sort_col]
+        item = cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%")))
+        item = item.order_by(order_by)
+        item = item.slice(start, stop)
+        return item.all()
+
+    @classmethod
+    def get_slice_json(cls, like, start, stop, sort_col, sort_dir):
+        r_json = []
+        items = SysUser.get_slice(like, start, stop, sort_col, sort_dir)
+        for item in items:
+            r_json.append(item)
+        return json.dumps(r_json, cls=new_alchemy_encoder(), check_circular=False)
+
+    @classmethod
+    def get_slice_count(cls, like):
+        items = cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%"))).all()
+        return len(items)

@@ -2,7 +2,8 @@ __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
 from sqlalchemy import Column, String
-from reindeer.sys.base_db_model import BaseDbModel
+from reindeer.sys.base_db_model import BaseDbModel, new_alchemy_encoder
+import json
 
 class SysGroup(BaseDbModel):
     __tablename__ = 'RA_SYS_GROUP'
@@ -21,3 +22,16 @@ class SysGroup(BaseDbModel):
             return group
         else:
             return None
+
+    @classmethod
+    def get_all(cls):
+        item = cls.db_session.query(SysGroup).all()
+        return item
+
+    @classmethod
+    def get_all_json(cls):
+        r_json = []
+        items = SysGroup.get_all()
+        for item in items:
+            r_json.append(item)
+        return json.dumps(r_json, cls=new_alchemy_encoder(), check_circular=False)

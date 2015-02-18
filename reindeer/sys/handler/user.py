@@ -12,8 +12,19 @@ class UserListHandler(reindeer.sys.base_handler.BaseHandler):
         self.render('sys/user_list.html')
 
     def post(self):
-        json = SysUser.get_all_json()
-        return self.write('{"success": true, "aaData":'+json+'}')
+        r_echo = self.get_argument('sEcho')
+        r_start = int(self.get_argument('iDisplayStart'))
+        r_length = int(self.get_argument('iDisplayLength'))
+        r_search = self.get_argument('sSearch')
+        r_sort_col = self.get_arguments('iSortCol_0')[0]
+        r_sort_dir = self.get_arguments('sSortDir_0')[0]
+
+        json = SysUser.get_slice_json(r_search, r_start, r_start+r_length, r_sort_col, r_sort_dir)
+        total = SysUser.get_all_count()
+        slice_total = SysUser.get_slice_count(r_search)
+        r_json = '{"success": true, "aaData":'+json+',"iTotalRecords":'+str(total)+',"iTotalDisplayRecords":'+str(slice_total)+',"sEcho":'+str(r_echo)+'}'
+        print(r_json)
+        return self.write(r_json)
 
 
 class UserAddHandler(reindeer.sys.base_handler.BaseHandler):

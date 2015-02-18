@@ -42,7 +42,13 @@ $.fn.dataTableExt.oApi.fnReloadAjax = function ( oSettings, sNewSource, fnCallba
     }, oSettings );
 };
 
-function initDataTable(table,url,columns){
+function initDataTable(table,url,columns,serverSide,defSort){
+    if(null==serverSide||undefined==serverSide){
+        serverSide=false;
+    }
+    if(null==defSort||undefined==defSort){
+        defSort=[[0,'asc']];
+    }
     return table.dataTable({
             "bJQueryUI": true,
             "sPaginationType": "full_numbers",
@@ -52,9 +58,11 @@ function initDataTable(table,url,columns){
             "bLengthChange": true, //改变每页显示数据数量
             "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "全部"]],
             "bAutoWidth":true,
+            "bSort": true,
+            "aaSorting": defSort,
             "oLanguage": {
                  "sProcessing": "正在加载",
-                 "sLengthMenu": "           _MENU_",
+                 "sLengthMenu": "每页 _MENU_ 项",
                  "sZeroRecords": "未找到相关记录",
                  "sEmptyTable": "无记录",
                  "sInfo": "从 _START_ 到 _END_ 条，共 _TOTAL_ 条记录",
@@ -66,10 +74,10 @@ function initDataTable(table,url,columns){
                      "sNext": "下一页",
                      "sLast": "末页"
                  }
-            },"sAjaxSource": url,
-            //"bServerSide": true, //是否启用办事器处理惩罚数据源
+            },
+            "sAjaxSource": url,
+            "bServerSide": serverSide, //是否启用服务器逻辑过滤数据
             "fnServerData": function ( sSource, aoData, fnCallback , oSettings) {
-                //aoData.push ({name:"_rt",value:Math.floor(Math.random()*1000)});
                 oSettings.jqXHR = ajaxCommitWithGritter( url,aoData,fnCallback);
             },
             "aoColumns": columns,

@@ -8,4 +8,4 @@ app_urls = []
 app_urls.extend(sys_urls)
 
 app_modules = {}
-app_modules = dict(app_modules.items() + sys_modules.items())
+app_modules.update(sys_modules)

@@ -7,13 +7,12 @@
 <script>
 var datatable;
 function initTable(){
-        datatable = initDataTable($('#table'),"user_list",[
-			{ "mDataProp": "CODE" },
+        datatable = initDataTable($('#table'),"group_list",[
             { "mDataProp": "NAME" },
-            { "mDataProp": "STATUS" },
+            { "mDataProp": "DES" },
             { "mDataProp": "C_USER" },
             { "mDataProp": "C_DATE" }
-    ],true,[[ 4, "desc" ]]);
+    ],false);
 }
 $(document).ready(function(){
     initTable();
@@ -23,20 +22,19 @@ $(document).ready(function(){
 </head>
 <body>
         <br/>
-        <h4>用户管理</h4>
+        <h4>用户组管理</h4>
         <hr/>
         <div class="widget-box">
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
-            <h5>用户管理</h5>
+            <h5>用户组管理</h5>
           </div>
           <div class="widget-content nopadding">
             <table id="table" class="table table-bordered data-table with-check">
               <thead>
                 <tr>
                   <!--<th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>-->
-                  <th>用户名</th>
-                  <th>昵称</th>
-                  <th>状态</th>
+                  <th>群组名</th>
+                  <th>描述</th>
                   <th>创建人</th>
                   <th>创建时间</th>
                 </tr>
@@ -46,7 +44,6 @@ $(document).ready(function(){
             </table>
           </div>
         </div>
-<button onclick="ajaxCommitWithGritter( 'user_add',null,initTable);">新建</button>
 <button onclick="datatable.fnReloadAjax();">刷新</button>
 
 </body>
