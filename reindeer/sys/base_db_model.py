@@ -19,6 +19,7 @@ def new_init(self, *args, **kwargs):
     original_init(self, *args, **kwargs)
     if not self.ID:
         self.ID = uuid.uuid1()
+    self.C_DATE = datetime.now()
 
 
 BaseDbModel.__init__ = new_init

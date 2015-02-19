@@ -8,28 +8,59 @@
 var datatable;
 function initTable(){
         datatable = initDataTable($('#table'),"user_list",[
-            { "mDataProp": "ID","sWidth" : "2%","bSortable": false,"bSearchable": false,
+            { "mDataProp": "ID","bSortable": false,"bSearchable": false, "sClass":"edit",
 					  "mRender": function (data, type, full) {
-							 return '<input id="'+data+'" type="checkbox" />'
+							 return '<input id="'+data+'" class="table_checkbox" type="checkbox" />';
 					  }},
-            { "mDataProp": "CODE","sWidth" : "20%" },
-            { "mDataProp": "NAME","sWidth" : "20%" },
+            { "mDataProp": "CODE"},
+            { "mDataProp": "NAME" },
             { "mDataProp": "STATUS" ,
 					  "mRender": function (data, type, full) {
 						  if(data=='1'){ return '正常';}
                           else if(data=='2'){ return '已删除';}
                           return '已禁用';
 					  }},
-            { "mDataProp": "C_USER" },
-            { "mDataProp": "C_DATE" }
+            { "mDataProp": "C_USER"  },
+            { "mDataProp": "C_DATE" },
+            { "mDataProp": "ID","bSortable": false,"bSearchable": false, "sClass":"edit",
+					  "mRender": function (data, type, full) {
+							 return  '<button class="btn btn-info  btn-mini"  onclick="doEdit(\''+data+'\');">编辑</button>'+
+                                      '<button class="btn btn-danger  btn-mini"  onclick="doDelete(\''+data+'\');">删除</button>';
+					  }}
     ],true,[[ 4, "desc" ]]);
+}
+function doRefresh(){
+    window.location.reload();
+}
+var deleteId;
+function doDelete(id){
+    deleteId = id;
+    $('#delete_alert').modal('show');
+}
+function doDeleteOk(){
+    ajaxCommitWithGritter( 'user_delete',[{name:'uid',value:deleteId}],doRefresh);
+}
+function doEdit(id){
+    alert(id);
+}
+function doBatchDelete(){
+    var ids = getTableCheckBoxChecked()
+    if(ids.length<1){
+        showGritter("error","未勾选内容","请至少勾选一项");
+        return;
+    }
+    deleteId = ids;
+    $('#delete_alert').modal('show');
 }
 $(document).ready(function(){
     initTable();
+//    $('#delete_alert').on('hide.bs.modal', function () {
+//        doRefresh(deletePage);
+//    });
 });
 </script>
 </head>
-<body>
+<body class="container-fluid">
         <br/>
         <h4>用户管理</h4>
         <hr/>
@@ -37,10 +68,9 @@ $(document).ready(function(){
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
             <h5>用户管理</h5>
               <div class="button-label">
-                <button class="btn btn-primary btn-title" onclick="ajaxCommitWithGritter( 'user_add',null,initTable);">新建</button>
-                <button class="btn btn-info btn-title" onclick="datatable.fnReloadAjax();">编辑</button>
-                <button class="btn btn-danger btn-title" onclick="datatable.fnReloadAjax();">删除</button>
-                <button class="btn btn-success btn-title" onclick="datatable.fnReloadAjax();">刷新</button>
+                <button class="btn btn-primary btn-title" onclick="ajaxCommitWithGritter( 'user_add',null,doRefresh);">新建</button>
+                <button class="btn btn-danger btn-title" onclick="doBatchDelete();">批量删除</button>
+                <button class="btn btn-success btn-title" onclick="doRefresh();">刷新</button>
               </div>
           </div>
 
@@ -54,12 +84,25 @@ $(document).ready(function(){
                   <th>状态</th>
                   <th>创建人</th>
                   <th>创建时间</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div id="delete_alert" class="modal hide">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>删除选中项</h3>
+            </div>
+            <div class="modal-body">
+                <p>是否要删除选中项？</p>
+            </div>
+            <div class="modal-footer"><a data-dismiss="modal" class="btn btn-primary" onclick="doDeleteOk();" >确认</a> <a
+                    data-dismiss="modal" class="btn">取消</a></div>
         </div>
 </body>
 </html>

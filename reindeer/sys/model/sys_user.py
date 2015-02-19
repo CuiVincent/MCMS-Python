@@ -34,6 +34,20 @@ class SysUser(BaseDbModel):
             return None
 
     @classmethod
+    def delete(cls, user_ID):
+        items = cls.db_session.query(SysUser).filter(SysUser.ID == user_ID)
+        if items.count() < 1:
+            return False
+        items.delete()
+        try:
+            cls.db_session.commit()
+            return True
+        except:
+            cls.db_session.rollback()
+            return False
+
+
+    @classmethod
     def get_by_code(cls, user_code):
         item = cls.db_session.query(SysUser).filter(SysUser.CODE == user_code).first()
         return item
@@ -45,8 +59,7 @@ class SysUser(BaseDbModel):
 
     @classmethod
     def get_all(cls):
-        item = cls.db_session.query(SysUser).all()
-        return item
+        return cls.db_session.query(SysUser).all()
 
     @classmethod
     def get_all_json(cls):
@@ -58,8 +71,7 @@ class SysUser(BaseDbModel):
 
     @classmethod
     def get_all_count(cls):
-        items = SysUser.get_all()
-        return len(items)
+        return cls.db_session.query(SysUser).count()
 
     @classmethod
     def get_slice(cls, like, start, stop, sort_col, sort_dir):
@@ -88,5 +100,4 @@ class SysUser(BaseDbModel):
 
     @classmethod
     def get_slice_count(cls, like):
-        items = cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%"))).all()
-        return len(items)
+        return cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%"))).count()
