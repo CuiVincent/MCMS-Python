@@ -46,6 +46,22 @@ class SysUser(BaseDbModel):
             cls.db_session.rollback()
             return False
 
+    @classmethod
+    def update(cls, user_ID, user_name, user_status):
+        items = cls.db_session.query(SysUser).filter(SysUser.ID == user_ID)
+        if items.count() < 1:
+            return False
+        update = {
+            SysUser.NAME: user_name,
+            SysUser.STATUS: user_status,
+        }
+        items.update(update)
+        try:
+            cls.db_session.commit()
+            return True
+        except:
+            cls.db_session.rollback()
+            return False
 
     @classmethod
     def get_by_code(cls, user_code):

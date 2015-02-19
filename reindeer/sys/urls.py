@@ -15,6 +15,7 @@ sys_urls = [
     (r'/logout', login.LogoutHandler),
     (r'/user_list', user.UserListHandler),
     (r'/user_add', user.UserAddHandler),
+    (r'/user_update', user.UserUpdateHandler),
     (r'/user_delete', user.UserDeleteHandler),
     (r'/group_list', group.GroupListHandler)
 ]

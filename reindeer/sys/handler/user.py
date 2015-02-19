@@ -37,6 +37,18 @@ class UserAddHandler(reindeer.sys.base_handler.BaseHandler):
             return self.write(json_encode({'success': True}))
 
 
+class UserUpdateHandler(reindeer.sys.base_handler.BaseHandler):
+    def get(self):
+        self.render('sys/user_add.html')
+
+    def post(self):
+        uid = str(self.get_argument('uid'))
+        if SysUser.update(uid, 'AAA', 2):
+            return self.write(json_encode({'success': True}))
+        else:
+            raise BusinessRuleException(1153)
+
+
 class UserDeleteHandler(reindeer.sys.base_handler.BaseHandler):
     def post(self):
         uids = str(self.get_argument('uid')).split(',')
