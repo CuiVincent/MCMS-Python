@@ -18,11 +18,10 @@ function doAjaxCommit( url, param, onSuccess,onError) {
     });
 }
 
-function doAjaxCommitForm( url, form, onSuccess,onError) {
-    var param = "";
-    var queryStr = getQueryStrFomForm(form[0]);
-    if (queryStr != undefined) {
-        param = queryStr;
+function doAjaxCommitForm( url, form, onSuccess,onError,p_param){
+    var param = getFormParam(form[0]);
+    if(null!=p_param && undefined!=p_param){
+        param = param.concat(p_param);
     }
     doAjaxCommit( url, param, onSuccess,onError);
 }
@@ -46,38 +45,28 @@ String.prototype.equalsIgnoreCase=function(arg)
     return (new String(this.toLowerCase())==(new String(arg)).toLowerCase());
 };
 
-
-function getQueryStrFomForm(fm)
+function getFormParam(form)
 {
-    var tp = fm.elements;
-    var str = "";
-    var names = "";
-
+    var tp = form.elements;
+    var param = [];
     for(var i=0;i<tp.length;i++)
     {
         if(tp[i].type.equalsIgnoreCase("text") || tp[i].type.equalsIgnoreCase("hidden") || tp[i].type.equalsIgnoreCase("textarea") || tp[i].type.equalsIgnoreCase("select-one") || tp[i].type.equalsIgnoreCase("password"))
         {
-
             if (tp[i].name != "")
             {
-                //names = names + "," + tp[i].name;
-                str = str + "&" + tp[i].name + "=" + tp[i].value.toUrlString();
+                param.push({name: tp[i].name,value:tp[i].value.toUrlString()});
             }
         }
         else if ((tp[i].type.equalsIgnoreCase("checkbox") || tp[i].type.equalsIgnoreCase("radio")) && tp[i].checked)
         {
-
             if (tp[i].name != "")
             {
-                str = str + "&" + tp[i].name + "=" + tp[i].value.toUrlString();
+                param.push({name: tp[i].name,value:tp[i].value.toUrlString()});
             }
         }
     }
-    if(str != "")
-    {
-        str = str.substring(1,str.length);
-    }
-    return str;
+    return param;
 }
 
 /**

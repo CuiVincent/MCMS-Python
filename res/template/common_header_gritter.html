@@ -11,11 +11,11 @@
                 showAjaxErrorGritter(result);
             });
         }
-        function ajaxCommitFormWithGritter( form,succcess){
+        function ajaxCommitFormWithGritter( form,succcess,param){
             var url = $(form).attr("action");
             doAjaxCommitForm(url,form,succcess,function(result){
                 showAjaxErrorGritter(result);
-            });
+            },param);
         }
         function showAjaxErrorGritter(result){
             var title = result.msg;

@@ -29,18 +29,14 @@ class UserListHandler(reindeer.sys.base_handler.BaseHandler):
 
 
 class UserAddHandler(reindeer.sys.base_handler.BaseHandler):
-    def get(self):
-        self.render('sys/user_add.html')
-
     def post(self):
-        if SysUser.add(str(random.uniform(10, 20)),"FFFFFFF","111"):
+        code = self.get_argument('user_code')
+        name = self.get_argument('user_name')
+        if SysUser.add(code, name, "111"):
             return self.write(json_encode({'success': True}))
 
 
-class UserUpdateHandler(reindeer.sys.base_handler.BaseHandler):
-    def get(self):
-        self.render('sys/user_add.html')
-
+class UserEditHandler(reindeer.sys.base_handler.BaseHandler):
     def post(self):
         uid = str(self.get_argument('uid'))
         if SysUser.update(uid, 'AAA', 2):

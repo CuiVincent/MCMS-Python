@@ -2,8 +2,10 @@
 <html>
 <head>
     <title></title>
+    <meta charset="UTF-8"/>
     {% include '../matrix_header_page_table.html' %}
     {% include '../common_header_datatable.html' %}
+    {% include '../common_header_validate.html' %}
 <script>
 var datatable;
 function initTable(){
@@ -32,6 +34,37 @@ function initTable(){
 function doRefresh(){
     window.location.reload();
 }
+function doAdd() {
+    $("#user_list").slideUp();
+    $("#user_add").fadeIn();
+}
+function doAddCancel(){
+    $("#user_add").hide();
+	$("#user_list").fadeIn();
+}
+function doAddOk(){
+    if (validate($("#useradd_form")))//主动校验
+          ajaxCommitFormWithGritter($("#useradd_form"), function () {
+              doAddCancel();
+              doRefresh();
+          });
+}
+var editId;
+function doEdit(id) {
+    editId=id;
+    $("#user_list").slideUp();
+    $("#user_edit").fadeIn();
+}
+function doEditCancel(){
+    $("#user_edit").hide();
+	$("#user_list").fadeIn();
+}
+function doEditOk(){
+    ajaxCommitFormWithGritter($("#useredit_form"), function () {
+        doEditCancel();
+        doRefresh();
+    },[{name:'uid',value:editId}]);
+}
 var deleteId;
 function doDelete(id){
     deleteId = id;
@@ -39,9 +72,6 @@ function doDelete(id){
 }
 function doDeleteOk(){
     ajaxCommitWithGritter( 'user_delete',[{name:'uid',value:deleteId}],doRefresh);
-}
-function doEdit(id){
-    ajaxCommitWithGritter( 'user_update',[{name:'uid',value:id}],doRefresh);
 }
 function doBatchDelete(){
     var ids = getTableCheckBoxChecked()
@@ -61,6 +91,7 @@ $(document).ready(function(){
 </script>
 </head>
 <body class="container-fluid">
+    <div id = "user_list">
         <br/>
         <h4>用户管理</h4>
         <hr/>
@@ -68,7 +99,7 @@ $(document).ready(function(){
           <div class="widget-title"> <span class="icon"><i class="icon-th"></i></span>
             <h5>用户管理</h5>
               <div class="button-label">
-                <button class="btn btn-primary btn-title" onclick="ajaxCommitWithGritter( 'user_add',null,doRefresh);">新建</button>
+                <button class="btn btn-primary btn-title" onclick="doAdd();">新建</button>
                 <button class="btn btn-danger btn-title" onclick="doBatchDelete();">批量删除</button>
                 <button class="btn btn-success btn-title" onclick="doRefresh();">刷新</button>
               </div>
@@ -101,8 +132,94 @@ $(document).ready(function(){
             <div class="modal-body">
                 <p>是否要删除选中项？</p>
             </div>
-            <div class="modal-footer"><a data-dismiss="modal" class="btn btn-primary" onclick="doDeleteOk();" >确认</a> <a
-                    data-dismiss="modal" class="btn">取消</a></div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-primary" onclick="doDeleteOk();" >确认</a>
+                <a data-dismiss="modal" class="btn">取消</a>
+            </div>
         </div>
+
+    </div>
+
+    <div id="user_add" style ="display:none;">
+        <br/>
+        <h4>新建用户</h4>
+        <hr/>
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-pencil"></i> </span>
+            <h5>新建用户</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <form id="useradd_form" action="user_add" method="post" class="form-horizontal">
+                {% raw xsrf_form_html() %}
+                <div class="control-group">
+                  <label class="control-label">用户名</label>
+                  <div class="controls">
+                    <input type="text" name="user_code"  validate="{required:true,messages:{required:'请输入用户名'}}" placeholder="请输入用户名"/>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">昵称</label>
+                  <div class="controls">
+                    <input type="text" name="user_name"  placeholder="请输入昵称" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">状态</label>
+                  <div class="controls">
+                    <div data-toggle="buttons-radio" class="btn-group">
+                      <button class="btn btn-primary" type="button">启用</button>
+                      <button class="btn btn-primary" type="button">禁用</button>
+                    </div>
+                  </div>
+                </div>
+              <div class="form-actions">
+                <a class="btn btn-info" onclick="doAddCancel();" >取消</a>
+                <a class="btn btn-primary" onclick="doAddOk();"  >保存</a>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
+
+    <div id="user_edit" style ="display:none;">
+        <br/>
+        <h4>编辑用户</h4>
+        <hr/>
+        <div class="widget-box">
+          <div class="widget-title"> <span class="icon"> <i class="icon-pencil"></i> </span>
+            <h5>编辑用户</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <form id="useredit_form" action="user_edit" method="post" class="form-horizontal">
+                {% raw xsrf_form_html() %}
+                <div class="control-group">
+                  <label class="control-label">用户名</label>
+                  <div class="controls">
+                    <input type="text" name="user_code" disabled="" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">昵称</label>
+                  <div class="controls">
+                    <input type="text" name="user_name"  placeholder="请输入昵称" />
+                  </div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">状态</label>
+                  <div class="controls">
+                    <div data-toggle="buttons-radio" class="btn-group">
+                      <button class="btn btn-primary" type="button">启用</button>
+                      <button class="btn btn-primary" type="button">禁用</button>
+                    </div>
+                  </div>
+                </div>
+              <div class="form-actions">
+                <a class="btn btn-info" onclick="doEditCancel();" >取消</a>
+                <a class="btn btn-primary" onclick="doEditOk();"  >保存</a>
+              </div>
+            </form>
+          </div>
+        </div>
+    </div>
 </body>
 </html>

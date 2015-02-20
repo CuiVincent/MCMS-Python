@@ -202,14 +202,19 @@ hr{ border-top-color:#dadada;}
 }
 /* Content */
 #content {
-	background: none repeat scroll 0 0 #eeeeee;
+	background: none repeat scroll 0 0 #2E363F;
 	margin-left: 220px;
 	margin-right: 0;
-	padding-bottom: 25px;
+	padding-bottom: 0px;
 	position: relative;
 	min-height:100%;
 	width: auto;
 }
+
+.content-iframe{
+    min-height:540px;
+}
+
 #content-header {
 	position: abslute;
 	width: 100%;
