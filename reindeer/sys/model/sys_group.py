@@ -2,10 +2,10 @@ __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
 from sqlalchemy import Column, String
-from reindeer.sys.base_db_model import BaseDbModel, new_alchemy_encoder
+from reindeer.sys.base_db_model import InfoTableModel, new_alchemy_encoder
 import json
 
-class SysGroup(BaseDbModel):
+class SysGroup(InfoTableModel):
     __tablename__ = 'RA_SYS_GROUP'
     NAME = Column(String(100))
     DES = Column(String(1000))

@@ -6,7 +6,7 @@ import reindeer.sys.base_handler
 from reindeer.sys.model.sys_user import SysUser
 from reindeer.sys.exceptions import BusinessRuleException
 from reindeer.util.common_util import to_md5
-
+from reindeer.sys import strings
 
 class LoginHandler(reindeer.sys.base_handler.BaseHandler):
     def get(self):
@@ -22,7 +22,7 @@ class LoginHandler(reindeer.sys.base_handler.BaseHandler):
         if user:
             if to_md5(pass_wd) != user.PASSWORD:
                 raise BusinessRuleException(1002)
-            elif user.STATUS != '1':
+            elif user.STATUS != strings.user_status_normal:
                 raise BusinessRuleException(1003)
         else:
             raise BusinessRuleException(1001)

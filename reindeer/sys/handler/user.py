@@ -33,7 +33,7 @@ class UserAddHandler(reindeer.sys.base_handler.BaseHandler):
         code = self.get_argument('user_code')
         name = self.get_argument('user_name')
         status = self.get_argument('user_status') if self.get_argument('user_status') else 1
-        if SysUser.add(code, name, "111", status):
+        if SysUser.add(code, name, "111", status, self.get_current_user().CODE):
             return self.write(json_encode({'success': True}))
 
 

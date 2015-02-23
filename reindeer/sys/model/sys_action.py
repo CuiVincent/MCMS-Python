@@ -2,7 +2,7 @@ __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
 from sqlalchemy import Column, String, Integer
-from reindeer.sys.base_db_model import BaseDbModel
+from reindeer.sys.base_db_model import InfoTableModel
 from reindeer.sys.exceptions import BusinessRuleException
 from reindeer.sys.model.sys_group_action import SysGroupAction
 from reindeer.sys import strings
@@ -10,7 +10,7 @@ from reindeer.sys.model.sys_group_user import SysGroupUser
 import uuid
 
 
-class SysAction(BaseDbModel):
+class SysAction(InfoTableModel):
     __tablename__ = 'RA_SYS_ACTION'
     NAME = Column(String(100))
     TYPE = Column(String(2), default=strings.action_type_menu_menu)

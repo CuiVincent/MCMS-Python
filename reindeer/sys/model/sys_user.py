@@ -4,21 +4,24 @@ __author__ = 'CuiVincent'
 from sqlalchemy import Column, String, Integer, or_
 from sqlalchemy.exc import IntegrityError
 from reindeer.util.common_util import to_md5
-from reindeer.sys.base_db_model import BaseDbModel, new_alchemy_encoder
+from reindeer.sys.base_db_model import InfoTableModel, new_alchemy_encoder
 from reindeer.sys.exceptions import BusinessRuleException
+from reindeer.sys import strings
 import json
 
 
-class SysUser(BaseDbModel):
+class SysUser(InfoTableModel):
     __tablename__ = 'RA_SYS_USER'
     CODE = Column(String(100), unique=True)
     NAME = Column(String(100))
     PASSWORD = Column(String(100))
-    STATUS = Column(String(1), default='1')
+    STATUS = Column(String(1), default=strings.user_status_normal)
 
     @classmethod
-    def add(cls, user_code, user_name, pass_wd, status):
-        user = SysUser(CODE=user_code, NAME=user_name, PASSWORD=to_md5(pass_wd) if pass_wd else '', STATUS=status if status else 1)
+    def add(cls, user_code, user_name, pass_wd, status=strings.user_status_normal, c_user=None):
+        user = SysUser(CODE=user_code, NAME=user_name, PASSWORD=to_md5(pass_wd) if pass_wd else '', STATUS=status)
+        if c_user:
+            user.set_c_user(c_user)
         cls.db_session.add(user)
         try:
             cls.db_session.commit()
@@ -99,10 +102,12 @@ class SysUser(BaseDbModel):
             u'5': SysUser.C_DATE
         }
         order_by = -sort_cols[sort_col] if sort_dir == 'desc' else sort_cols[sort_col]
-        item = cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%")))
+        item = cls.db_session.query(SysUser).filter(
+            or_(SysUser.CODE.like("%" + like + "%"), SysUser.NAME.like("%" + like + "%"),
+                SysUser.C_USER.like("%" + like + "%")))
         if order_by is not None:
             item = item.order_by(order_by)
-        if stop-start >= 0:
+        if stop - start >= 0:
             item = item.slice(start, stop)
         return item.all()
 
@@ -116,4 +121,6 @@ class SysUser(BaseDbModel):
 
     @classmethod
     def get_slice_count(cls, like):
-        return cls.db_session.query(SysUser).filter(or_(SysUser.CODE.like("%"+like+"%"), SysUser.NAME.like("%"+like+"%"),SysUser.C_USER.like("%"+like+"%"))).count()
+        return cls.db_session.query(SysUser).filter(
+            or_(SysUser.CODE.like("%" + like + "%"), SysUser.NAME.like("%" + like + "%"),
+                SysUser.C_USER.like("%" + like + "%"))).count()

@@ -7,31 +7,38 @@ from datetime import datetime
 import uuid
 import json
 from sqlalchemy.ext.declarative import DeclarativeMeta
+from reindeer.sys import strings
 
-BaseDbModel = declarative_base(name='BaseDbModel')
-BaseDbModel.ID = Column(String(50), primary_key=True)
-BaseDbModel.C_USER = Column(String(50), default='[UNKNOW]')
-BaseDbModel.C_DATE = Column(DateTime, default=datetime.now())
-original_init = BaseDbModel.__init__
+# 以下是不提供默认字段的普通表基类
+NormalTableModel = declarative_base(name='NormalTableModel')
+
+# 以下是提供ID、创建信息等默认字段的信息表基类
+InfoTableModel = declarative_base(name='InfoTableModel')
+InfoTableModel.ID = Column(String(50), primary_key=True)
+InfoTableModel.C_USER = Column(String(50), default=strings.str_user_unknown)
+InfoTableModel.C_DATE = Column(DateTime, default=datetime.now())
+
+original_init = InfoTableModel.__init__
 
 
-def new_init(self, *args, **kwargs):
+def info_table_init(self, *args, **kwargs):
     original_init(self, *args, **kwargs)
     if not self.ID:
         self.ID = uuid.uuid1()
     self.C_DATE = datetime.now()
 
 
-BaseDbModel.__init__ = new_init
+InfoTableModel.__init__ = info_table_init
 
 
 def set_c_user(self, c_user):
     self.C_USER = c_user
 
 
-BaseDbModel.set_c_user = set_c_user
+InfoTableModel.set_c_user = set_c_user
 
 
+# 以下是一些通用方法
 def new_alchemy_encoder():
     _visited_objs = []
 

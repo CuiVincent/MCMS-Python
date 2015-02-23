@@ -2,13 +2,13 @@ __author__ = 'CuiVincent'
 # -*- coding: utf8 -*-
 
 from sqlalchemy import Column, String
-from reindeer.sys.base_db_model import BaseDbModel
+from reindeer.sys.base_db_model import NormalTableModel
 
 
-class SysGroupAction(BaseDbModel):
+class SysGroupAction(NormalTableModel):
     __tablename__ = 'RA_SYS_GROUP_ACTION'
-    GROUP = Column(String(50))
-    ACTION = Column(String(50))
+    GROUP = Column(String(50), primary_key=True)
+    ACTION = Column(String(50), primary_key=True)
 
     @classmethod
     def add(cls, group, action):

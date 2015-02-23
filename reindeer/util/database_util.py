@@ -83,7 +83,7 @@ class DatabaseUtil:
 
     @staticmethod
     def init_database_data():
-        user_id = SysUser.add('reindeer', '超级管理员', '111').ID
+        user_id = SysUser.add('reindeer', '超级管理员', '111', 1, strings.str_user_sys).ID
         group_id = SysGroup.add('admin', '系统管理组').ID
         SysGroupUser.add(group_id, user_id)
         sys_action_id = SysAction.add(name='系统管理', url='sys_manager', parent=strings.action_root_main_parent,
@@ -101,9 +101,17 @@ class DatabaseUtil:
         SysGroupAction.add(group_id, [sys_action_id, sys_action_group_id, sys_action_user_id, sys_action_action_id])
         SysGroupAction.add(group_id, [app_action_id, app_action_platform_id])
 
+        DatabaseUtil.initTestData()
+
     @staticmethod
     def init(db_instance):
-        # DatabaseUtil.drop_all_table(db_instance) 不知问什么会锁表
+        # DatabaseUtil.drop_all_table(db_instance) #不知为什么会锁表
         DatabaseUtil.create_all_table(db_instance)
         DatabaseUtil.init_database_data()
 
+    # 以下制造测试数据
+    @staticmethod
+    def initTestData():
+        for x in ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"]:
+            for i in range(100, 200):
+                SysUser.add('TEST-CODE-'+x+str(i),'TEST-NAME-'+x+str(i), '111', 1).ID
