@@ -1,6 +1,5 @@
 {% include './common_header_gritter.html' %}
 <script>
-
 function initDataTable(table,url,columns,serverSide,defSort){
     if(null==serverSide||undefined==serverSide){
         serverSide = false;
@@ -14,6 +13,7 @@ function initDataTable(table,url,columns,serverSide,defSort){
             "sDom": '<""l>t<"F"fp>',
             "bStateSave": true, //保存状态到cookie
             "bInfo": true,//页脚信息
+
             "bLengthChange": true, //改变每页显示数据数量
             "aLengthMenu": [[10, 25, 50, -1], [10, 25, 50, "全部"]],
             "bAutoWidth":true,

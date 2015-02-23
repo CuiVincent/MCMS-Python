@@ -17,8 +17,8 @@ class SysUser(BaseDbModel):
     STATUS = Column(String(1), default='1')
 
     @classmethod
-    def add(cls, user_code, user_name, pass_wd):
-        user = SysUser(CODE=user_code, NAME=user_name, PASSWORD=to_md5(pass_wd) if pass_wd else '')
+    def add(cls, user_code, user_name, pass_wd, status):
+        user = SysUser(CODE=user_code, NAME=user_name, PASSWORD=to_md5(pass_wd) if pass_wd else '', STATUS=status if status else 1)
         cls.db_session.add(user)
         try:
             cls.db_session.commit()

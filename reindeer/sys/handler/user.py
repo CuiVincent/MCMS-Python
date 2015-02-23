@@ -32,14 +32,17 @@ class UserAddHandler(reindeer.sys.base_handler.BaseHandler):
     def post(self):
         code = self.get_argument('user_code')
         name = self.get_argument('user_name')
-        if SysUser.add(code, name, "111"):
+        status = self.get_argument('user_status') if self.get_argument('user_status') else 1
+        if SysUser.add(code, name, "111", status):
             return self.write(json_encode({'success': True}))
 
 
 class UserEditHandler(reindeer.sys.base_handler.BaseHandler):
     def post(self):
         uid = str(self.get_argument('uid'))
-        if SysUser.update(uid, 'AAA', 2):
+        status = self.get_argument('user_status') if self.get_argument('user_status') else 1
+        name = self.get_argument('user_name')
+        if SysUser.update(uid, name, status):
             return self.write(json_encode({'success': True}))
         else:
             raise BusinessRuleException(1153)
