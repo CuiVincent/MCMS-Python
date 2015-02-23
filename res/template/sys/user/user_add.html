@@ -1,0 +1,70 @@
+<script>
+    function getAddStatusValue() {
+        var status = 1;
+        if ($("#a_status_group button:eq(1)").hasClass("active")) {
+            status = 2;
+        }
+        return status;
+    }
+    function doAdd() {
+        $("#div_list").slideUp();
+        $("#div_add").fadeIn();
+    }
+    function doAddCancel() {
+        $("#div_add").hide();
+        $("#div_list").fadeIn();
+    }
+    function doAddOk() {
+        if (validate($("#form_add")))//主动校验
+            ajaxCommitFormWithGritter($("#form_add"), function () {
+                doAddCancel();
+                doRefresh();
+            }, [
+                {name: "user_status", value: getAddStatusValue()}
+            ]);
+    }
+</script>
+<div id="div_add" style="display:none;">
+    <br/>
+    <h4>新建用户</h4>
+    <hr/>
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-pencil"></i> </span>
+            <h5>新建用户</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <form id="form_add" action="user_add" method="post" class="form-horizontal">
+                {% raw xsrf_form_html() %}
+                <div class="control-group">
+                    <label class="control-label">用户名</label>
+
+                    <div class="controls">
+                        <input type="text" name="user_code" validate="{required:true,messages:{required:'请输入用户名'}}"
+                               placeholder="请输入用户名"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">昵称</label>
+
+                    <div class="controls">
+                        <input type="text" name="user_name" placeholder="请输入昵称"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+
+                    <div class="controls">
+                        <div id="a_status_group" data-toggle="buttons-radio" class="btn-group">
+                            <button class="btn btn-primary active" type="button">启用</button>
+                            <button class="btn btn-primary" type="button">禁用</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a class="btn btn-info" onclick="doAddCancel();">取消</a>
+                    <a class="btn btn-primary" onclick="doAddOk();">保存</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

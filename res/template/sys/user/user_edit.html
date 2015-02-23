@@ -1,0 +1,82 @@
+<script>
+    function getEditStatusValue() {
+        var status = 1;
+        if ($("#e_status_group button:eq(1)").hasClass("active")) {
+            status = 2;
+        }
+        return status;
+    }
+    function setEditStatus(status) {
+        if (status == 1) {
+            $("#e_status_group button:eq(0)").addClass("active");
+        } else {
+            $("#e_status_group button:eq(1)").addClass("active");
+        }
+    }
+    function doEdit(id, code, name, status) {
+        $("#e_uid").attr("value", id);
+        $("#e_code").attr("value", code);
+        $("#e_name").attr("value", name);
+        $("#e_status").attr("value", status);
+        setEditStatus(status);
+        $("#div_list").slideUp();
+        $("#div_edit").fadeIn();
+    }
+    function doEditCancel() {
+        $("#div_edit").hide();
+        $("#div_list").fadeIn();
+    }
+    function doEditOk() {
+        ajaxCommitFormWithGritter($("#form_edit"), function () {
+            doEditCancel();
+            doRefresh();
+        }, [
+            {name: "user_status", value: getEditStatusValue()}
+        ]);
+    }
+</script>
+<div id="div_edit" style="display:none;">
+    <br/>
+    <h4>编辑用户</h4>
+    <hr/>
+    <div class="widget-box">
+        <div class="widget-title"><span class="icon"> <i class="icon-pencil"></i> </span>
+            <h5>编辑用户</h5>
+        </div>
+        <div class="widget-content nopadding">
+            <form id="form_edit" action="user_edit" method="post" class="form-horizontal">
+                {% raw xsrf_form_html() %}
+                <input type="hidden" id="e_uid" name="uid" value=""/>
+
+                <div class="control-group">
+                    <label class="control-label">用户名</label>
+
+                    <div class="controls">
+                        <input type="text" id="e_code" disabled=""/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">昵称</label>
+
+                    <div class="controls">
+                        <input type="text" id="e_name" name="user_name" placeholder="请输入昵称"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">状态</label>
+
+                    <div class="controls">
+                        <div id="e_status_group" data-toggle="buttons-radio" class="btn-group">
+                            <button class="btn btn-primary" type="button">启用</button>
+                            <button class="btn btn-primary" type="button">禁用</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a class="btn btn-info" onclick="doEditCancel();">取消</a>
+                    <a class="btn btn-primary" onclick="doEditOk();">保存</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
