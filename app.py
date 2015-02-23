@@ -23,7 +23,7 @@ class Application(tornado.web.Application):
         tornado.web.ErrorHandler = reindeer.sys.base_handler.ErrorHandler
         self.db_instance = DatabaseInstance(db_settings, [InfoTableModel, NormalTableModel])
         Application.instance = self
-        DatabaseUtil.init(self.db_instance)
+        # DatabaseUtil.init(self.db_instance)
 
     @classmethod
     def instance(cls):
