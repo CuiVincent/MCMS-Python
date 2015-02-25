@@ -1,0 +1,68 @@
+.table td.edit {
+    text-align: center;
+}
+
+table.table thead .sorting {
+    background: url('../matrix_admin/img/sort_both.png') #efefef no-repeat center right;
+}
+
+table.table thead .sorting_asc {
+    background: url('../matrix_admin/img/sort_asc.png') #efefef no-repeat center right;
+}
+
+table.table thead .sorting_desc {
+    background: url('../matrix_admin/img/sort_desc.png') #efefef no-repeat center right;
+}
+
+.paging_full_numbers {
+    padding: 10px 15px 0px 5px;
+    border-right: medium none;
+    border-top: 1px solid #D5D5D5;
+    font-weight: normal;
+    margin-top: -1px;
+    margin-right: 0px;
+    background: #efefef;
+    border-bottom: 1px solid #CDCDCD;
+    height: 36px;
+}
+
+.paginate_button:hover {
+    background: #e8e8e8;
+    color: #222222;
+    text-shadow: 0 1px 0 #ffffff;
+    cursor: pointer;
+}
+
+.paginate_button {
+    font-size: 12px;
+    padding: 4px 10px !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dddddd #dddddd #cccccc;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    line-height: 16px;
+    text-shadow: 0 1px 0 #ffffff;
+    background: #f5f5f5;
+    color: #333333;
+    text-decoration: none;
+}
+
+.paginate_active {
+    font-size: 12px;
+    padding: 4px 10px !important;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dddddd #dddddd #cccccc;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    display: inline-block;
+    line-height: 16px;
+    background: #41BEDD !important;
+    color: #ffffff !important;
+    cursor: default !important;
+    font-weight: normal;
+}
+
+.paginate_button_disabled {
+    color: #AAAAAA !important;
+}
