@@ -5,6 +5,7 @@ from reindeer.sys.handler import index
 from reindeer.sys.handler import login
 from reindeer.sys.handler import user
 from reindeer.sys.handler import group
+from reindeer.sys.handler import action
 from reindeer.sys.module import main_menu
 from app_settings import app_settings
 
@@ -17,7 +18,9 @@ sys_urls = [
     (r'/user_add', user.UserAddHandler),
     (r'/user_edit', user.UserEditHandler),
     (r'/user_delete', user.UserDeleteHandler),
-    (r'/group_list', group.GroupListHandler)
+    (r'/group_list', group.GroupListHandler),
+    (r'/action_list', action.ActionListHandler)
+
 ]
 
 sys_modules = {'MainMenu': main_menu.MainMenuModule}

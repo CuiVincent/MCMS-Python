@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    {% include '../../matrix_header_page_tree.html' %}
+    <script>
+        var TreeView = function () {
+            return {
+                //main function to initiate the module
+                init: function () {
+                    var DataSourceTree = function (options) {
+                        this._data = options.data;
+                        this._delay = options.delay;
+                    };
+
+                    DataSourceTree.prototype = {
+
+                        data: function (options, callback) {
+                            var self = this;
+
+                            setTimeout(function () {
+                                var data = $.extend(true, [], self._data);
+
+                                callback({ data: data });
+
+                            }, this._delay)
+                        }
+                    };
+
+                    var treeDataSource4 = new DataSourceTree({
+                        data: [
+                            { name: 'Dashboard<div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div>', type: 'folder', additionalParameters: { id: 'F11' } },
+                            { name: 'View Category<div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div>', type: 'folder', additionalParameters: { id: 'F12' } },
+                            { name: '<i class="fa fa-user"></i> User <div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div><div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div>', type: 'item', additionalParameters: { id: 'I11' } },
+                            { name: '<i class="fa fa-calendar"></i> Events <div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div>', type: 'item', additionalParameters: { id: 'I12' } },
+                            { name: '<i class="fa  fa-gear "></i> Works <div class="tree-actions"><i class="fa fa-plus"></i><i class="fa fa-trash-o"></i><i class="fa fa-refresh"></i></div>', type: 'item', additionalParameters: { id: 'I12' } }
+                        ],
+                        delay: 400
+                    });
+
+
+                    $('#FlatTree4').tree({
+                        selectable: false,
+                        dataSource: treeDataSource4,
+                        loadingHTML: '<img src="images/input-spinner.gif"/>'
+                    });
+
+
+                }
+
+            };
+
+        }();
+
+    jQuery(document).ready(function() {
+        TreeView.init();
+    });
+    </script>
+</head>
+<body class="container-fluid">
+<br/>
+<h4>操作权限管理</h4>
+<hr/>
+<div class="widget-box">
+    <div class="widget-title"><span class="icon"><i class="icon-th"></i></span>
+        <h5>操作权限管理</h5>
+    </div>
+    <div class="widget-content nopadding">
+        <div id="FlatTree4" class="tree tree-solid-line">
+            <div class="tree-folder" style="display:none;">
+                <div class="tree-folder-header">
+                    <i class="fa fa-folder"></i>
+
+                    <div class="tree-folder-name"></div>
+                </div>
+                <div class="tree-folder-content"></div>
+                <div class="tree-loader" style="display:none"></div>
+            </div>
+            <div class="tree-item" style="display:none;">
+                <i class="tree-dot"></i>
+
+                <div class="tree-item-name"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

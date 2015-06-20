@@ -2,6 +2,17 @@
     text-align: center;
 }
 
+.button-group {
+    margin: 0px 10px;
+}
+.button-group .item-right {
+	margin: 0px 0px 10px;
+	float: right;
+}
+.button-group .item-left {
+	margin: 0px 0px 10px;
+	float: left;
+}
 table.table thead .sorting {
     background: url('../matrix_admin/img/sort_both.png') #efefef no-repeat center right;
 }
